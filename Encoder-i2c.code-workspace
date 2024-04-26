@@ -1,0 +1,15 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"ch32v003fun.h": "c",
+			"i2c_slave.h": "c",
+			"exti_pin_change_isr.h": "c",
+			"stdio.h": "c"
+		}
+	}
+}

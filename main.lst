@@ -1,0 +1,799 @@
+
+main.elf:     file format elf32-littleriscv
+
+
+Disassembly of section .init:
+
+00000000 <InterruptVector>:
+   0:	0ba0006f          	j	ba <handle_reset>
+   4:	00000000          	.word	0x00000000
+   8:	00000134          	.word	0x00000134
+   c:	00000130          	.word	0x00000130
+	...
+  30:	00000130          	.word	0x00000130
+  34:	00000000          	.word	0x00000000
+  38:	00000130          	.word	0x00000130
+  3c:	00000000          	.word	0x00000000
+  40:	00000130          	.word	0x00000130
+  44:	00000130          	.word	0x00000130
+  48:	00000130          	.word	0x00000130
+  4c:	00000130          	.word	0x00000130
+  50:	00000352          	.word	0x00000352
+  54:	00000130          	.word	0x00000130
+  58:	00000130          	.word	0x00000130
+  5c:	00000130          	.word	0x00000130
+  60:	00000130          	.word	0x00000130
+  64:	00000130          	.word	0x00000130
+  68:	00000130          	.word	0x00000130
+  6c:	00000130          	.word	0x00000130
+  70:	00000130          	.word	0x00000130
+  74:	00000130          	.word	0x00000130
+  78:	000003c4          	.word	0x000003c4
+  7c:	00000570          	.word	0x00000570
+  80:	00000130          	.word	0x00000130
+  84:	00000130          	.word	0x00000130
+  88:	00000130          	.word	0x00000130
+  8c:	00000130          	.word	0x00000130
+  90:	00000130          	.word	0x00000130
+  94:	00000130          	.word	0x00000130
+  98:	00000130          	.word	0x00000130
+  9c:	0000                	.insn	2, 0x
+	...
+
+Disassembly of section .text:
+
+000000a0 <onWrite>:
+
+// callback function to handle i2c write requests
+void onWrite( uint8_t reg, uint8_t length )
+{
+	// set LEDs on the board. Not implemented on the SOIC-8 device - insufficient pins
+}
+  a0:	8082                	ret
+
+000000a2 <onRead>:
+
+// callback function to handle i2c read requests
+// called *after* the data is sent out
+void onRead( uint8_t reg )
+{
+	i2c_read_registers[reg] = 0; // clear the buffers once it's been transmitted
+  a2:	200007b7          	lui	a5,0x20000
+  a6:	00478793          	add	a5,a5,4 # 20000004 <i2c_read_registers>
+  aa:	97aa                	add	a5,a5,a0
+  ac:	00078023          	sb	zero,0(a5)
+	encoder_direction = 0; // clear the encoder data
+  b0:	800183a3          	sb	zero,-2041(gp) # 20000007 <encoder_direction>
+	encoder_button_event = 0;
+  b4:	80018323          	sb	zero,-2042(gp) # 20000006 <encoder_button_event>
+}
+  b8:	8082                	ret
+
+000000ba <handle_reset>:
+  ba:	20000197          	auipc	gp,0x20000
+  be:	74618193          	add	gp,gp,1862 # 20000800 <__global_pointer$>
+  c2:	00018113          	mv	sp,gp
+  c6:	08000513          	li	a0,128
+  ca:	30051073          	csrw	mstatus,a0
+  ce:	468d                	li	a3,3
+  d0:	00000517          	auipc	a0,0x0
+  d4:	f3050513          	add	a0,a0,-208 # 0 <InterruptVector>
+  d8:	8d55                	or	a0,a0,a3
+  da:	30551073          	csrw	mtvec,a0
+  de:	20000517          	auipc	a0,0x20000
+  e2:	f2250513          	add	a0,a0,-222 # 20000000 <i2c_write_registers>
+  e6:	83c18593          	add	a1,gp,-1988 # 2000003c <_ebss>
+  ea:	4601                	li	a2,0
+  ec:	00b55663          	bge	a0,a1,f8 <handle_reset+0x3e>
+  f0:	c110                	sw	a2,0(a0)
+  f2:	0511                	add	a0,a0,4
+  f4:	feb54ee3          	blt	a0,a1,f0 <handle_reset+0x36>
+  f8:	5e400513          	li	a0,1508
+  fc:	20000597          	auipc	a1,0x20000
+ 100:	f0458593          	add	a1,a1,-252 # 20000000 <i2c_write_registers>
+ 104:	20000617          	auipc	a2,0x20000
+ 108:	efc60613          	add	a2,a2,-260 # 20000000 <i2c_write_registers>
+ 10c:	00c58863          	beq	a1,a2,11c <handle_reset+0x62>
+ 110:	4114                	lw	a3,0(a0)
+ 112:	c194                	sw	a3,0(a1)
+ 114:	0511                	add	a0,a0,4
+ 116:	0591                	add	a1,a1,4
+ 118:	fec59ae3          	bne	a1,a2,10c <handle_reset+0x52>
+ 11c:	e000f7b7          	lui	a5,0xe000f
+ 120:	4705                	li	a4,1
+ 122:	c398                	sw	a4,0(a5)
+ 124:	1a400793          	li	a5,420
+ 128:	34179073          	csrw	mepc,a5
+ 12c:	30200073          	mret
+
+00000130 <ADC1_IRQHandler>:
+ 130:	9002                	ebreak
+ 132:	a001                	j	132 <ADC1_IRQHandler+0x2>
+
+00000134 <NMI_Handler>:
+ 134:	40021737          	lui	a4,0x40021
+ 138:	471c                	lw	a5,8(a4)
+ 13a:	008006b7          	lui	a3,0x800
+ 13e:	8fd5                	or	a5,a5,a3
+ 140:	c71c                	sw	a5,8(a4)
+
+00000142 <SystemInit>:
+ 142:	400217b7          	lui	a5,0x40021
+ 146:	01080737          	lui	a4,0x1080
+ 14a:	0007a223          	sw	zero,4(a5) # 40021004 <__global_pointer$+0x20020804>
+ 14e:	08170713          	add	a4,a4,129 # 1080081 <main.c.d3001f23+0x107e047>
+ 152:	c398                	sw	a4,0(a5)
+ 154:	4685                	li	a3,1
+ 156:	40022737          	lui	a4,0x40022
+ 15a:	c314                	sw	a3,0(a4)
+ 15c:	009f0737          	lui	a4,0x9f0
+ 160:	c798                	sw	a4,8(a5)
+ 162:	40021737          	lui	a4,0x40021
+ 166:	431c                	lw	a5,0(a4)
+ 168:	00679693          	sll	a3,a5,0x6
+ 16c:	fe06dde3          	bgez	a3,166 <SystemInit+0x24>
+ 170:	435c                	lw	a5,4(a4)
+ 172:	400216b7          	lui	a3,0x40021
+ 176:	9bf1                	and	a5,a5,-4
+ 178:	0027e793          	or	a5,a5,2
+ 17c:	c35c                	sw	a5,4(a4)
+ 17e:	4721                	li	a4,8
+ 180:	42dc                	lw	a5,4(a3)
+ 182:	8bb1                	and	a5,a5,12
+ 184:	fee79ee3          	bne	a5,a4,180 <SystemInit+0x3e>
+ 188:	e00007b7          	lui	a5,0xe0000
+ 18c:	0f878793          	add	a5,a5,248 # e00000f8 <__global_pointer$+0xbffff8f8>
+ 190:	0007a023          	sw	zero,0(a5)
+ 194:	e00007b7          	lui	a5,0xe0000
+ 198:	0f478793          	add	a5,a5,244 # e00000f4 <__global_pointer$+0xbffff8f4>
+ 19c:	08000713          	li	a4,128
+ 1a0:	c398                	sw	a4,0(a5)
+ 1a2:	8082                	ret
+
+000001a4 <main>:
+	// enable interrupt
+	NVIC_EnableIRQ( EXTI7_0_IRQn );
+}
+
+int main( void )
+{
+ 1a4:	1151                	add	sp,sp,-12
+ 1a6:	c406                	sw	ra,8(sp)
+	SystemInit();
+ 1a8:	3f69                	jal	142 <SystemInit>
+	funGpioInitAll();
+ 1aa:	40021737          	lui	a4,0x40021
+ 1ae:	4f1c                	lw	a5,24(a4)
+	funPinMode( PA1, GPIO_CFGLR_IN_FLOAT );
+ 1b0:	400116b7          	lui	a3,0x40011
+ 1b4:	80068693          	add	a3,a3,-2048 # 40010800 <__global_pointer$+0x20010000>
+	funGpioInitAll();
+ 1b8:	0357e793          	or	a5,a5,53
+ 1bc:	cf1c                	sw	a5,24(a4)
+	funPinMode( PA1, GPIO_CFGLR_IN_FLOAT );
+ 1be:	4290                	lw	a2,0(a3)
+	funPinMode( PA2, GPIO_CFGLR_IN_FLOAT );
+ 1c0:	757d                	lui	a0,0xfffff
+ 1c2:	0ff50513          	add	a0,a0,255 # fffff0ff <__global_pointer$+0xdfffe8ff>
+	funPinMode( PA1, GPIO_CFGLR_IN_FLOAT );
+ 1c6:	f0f67613          	and	a2,a2,-241
+ 1ca:	04066613          	or	a2,a2,64
+ 1ce:	c290                	sw	a2,0(a3)
+	funPinMode( PA2, GPIO_CFGLR_IN_FLOAT );
+ 1d0:	4290                	lw	a2,0(a3)
+	funPinMode( PA1, GPIO_CFGLR_IN_FLOAT );
+ 1d2:	400117b7          	lui	a5,0x40011
+	EXTI->INTENR = ( EXTI_INTENR_MR1 | EXTI_INTENR_MR4 ); // Enable EXT line 1 and 4
+ 1d6:	45c9                	li	a1,18
+	funPinMode( PA2, GPIO_CFGLR_IN_FLOAT );
+ 1d8:	8e69                	and	a2,a2,a0
+ 1da:	40066613          	or	a2,a2,1024
+ 1de:	c290                	sw	a2,0(a3)
+	funPinMode( PC4, GPIO_CFGLR_IN_FLOAT );
+ 1e0:	4394                	lw	a3,0(a5)
+ 1e2:	fff10637          	lui	a2,0xfff10
+ 1e6:	167d                	add	a2,a2,-1 # fff0ffff <__global_pointer$+0xdff0f7ff>
+ 1e8:	8ef1                	and	a3,a3,a2
+ 1ea:	00040637          	lui	a2,0x40
+ 1ee:	8ed1                	or	a3,a3,a2
+ 1f0:	c394                	sw	a3,0(a5)
+	AFIO->EXTICR = ( AFIO_EXTICR1_EXTI1_PA | AFIO_EXTICR_EXTI4_PC );
+ 1f2:	20000613          	li	a2,512
+ 1f6:	400106b7          	lui	a3,0x40010
+ 1fa:	c690                	sw	a2,8(a3)
+	EXTI->INTENR = ( EXTI_INTENR_MR1 | EXTI_INTENR_MR4 ); // Enable EXT line 1 and 4
+ 1fc:	40068693          	add	a3,a3,1024 # 40010400 <__global_pointer$+0x2000fc00>
+ 200:	c28c                	sw	a1,0(a3)
+	EXTI->FTENR = ( EXTI_FTENR_TR1 | EXTI_FTENR_TR4 ); // Falling edge trigger on channels/pins 1 and 4
+ 202:	c6cc                	sw	a1,12(a3)
+ *
+ * @return  none
+ */
+RV_STATIC_INLINE void NVIC_EnableIRQ(IRQn_Type IRQn)
+{
+  NVIC->IENR[((uint32_t)(IRQn) >> 5)] = (1 << ((uint32_t)(IRQn) & 0x1F));
+ 204:	00100637          	lui	a2,0x100
+ 208:	e000e6b7          	lui	a3,0xe000e
+ 20c:	10c6a023          	sw	a2,256(a3) # e000e100 <__global_pointer$+0xc000d900>
+	funPinMode( PC1, GPIO_CFGLR_OUT_10Mhz_AF_OD ); // SDA
+ 210:	4390                	lw	a2,0(a5)
+ 212:	f0f67613          	and	a2,a2,-241
+ 216:	0d066613          	or	a2,a2,208
+ 21a:	c390                	sw	a2,0(a5)
+	funPinMode( PC2, GPIO_CFGLR_OUT_10Mhz_AF_OD ); // SCL
+ 21c:	4390                	lw	a2,0(a5)
+ 21e:	8e69                	and	a2,a2,a0
+ 220:	6505                	lui	a0,0x1
+ 222:	d0050513          	add	a0,a0,-768 # d00 <_data_lma+0x71c>
+ 226:	8e49                	or	a2,a2,a0
+ 228:	c390                	sw	a2,0(a5)
+
+void SetupI2CSlave( uint8_t address, volatile uint8_t *read_registers, uint8_t read_size,
+	volatile uint8_t *write_registers, uint8_t write_size, i2c_write_callback_t write_callback,
+	i2c_read_callback_t read_callback, bool read_only )
+{
+	i2c_slave_state.first_write = 1;
+ 22a:	200007b7          	lui	a5,0x20000
+ 22e:	4605                	li	a2,1
+ 230:	00c79423          	sh	a2,8(a5) # 20000008 <i2c_slave_state>
+	i2c_slave_state.offset = 0;
+	i2c_slave_state.position = 0;
+	i2c_slave_state.read_registers1 = read_registers;
+ 234:	20000637          	lui	a2,0x20000
+	i2c_slave_state.position = 0;
+ 238:	00878793          	add	a5,a5,8
+	i2c_slave_state.read_registers1 = read_registers;
+ 23c:	00460513          	add	a0,a2,4 # 20000004 <i2c_read_registers>
+ 240:	c3c8                	sw	a0,4(a5)
+	i2c_slave_state.write_registers1 = write_registers;
+ 242:	20000537          	lui	a0,0x20000
+ 246:	00050513          	mv	a0,a0
+ 24a:	c788                	sw	a0,8(a5)
+	i2c_slave_state.read_size1 = read_size;
+ 24c:	20200513          	li	a0,514
+ 250:	00a79623          	sh	a0,12(a5)
+	i2c_slave_state.write_size1 = write_size;
+	i2c_slave_state.read_registers2 = NULL;
+	i2c_slave_state.write_registers2 = NULL;
+	i2c_slave_state.read_size2 = 0;
+	i2c_slave_state.write_size2 = 0;
+	i2c_slave_state.write_callback1 = write_callback;
+ 254:	0a000513          	li	a0,160
+	i2c_slave_state.read_registers2 = NULL;
+ 258:	0007a823          	sw	zero,16(a5)
+	i2c_slave_state.write_callback1 = write_callback;
+ 25c:	cfc8                	sw	a0,28(a5)
+	i2c_slave_state.position = 0;
+ 25e:	00078123          	sb	zero,2(a5)
+	i2c_slave_state.write_registers2 = NULL;
+ 262:	0007aa23          	sw	zero,20(a5)
+	i2c_slave_state.read_size2 = 0;
+ 266:	00079c23          	sh	zero,24(a5)
+	i2c_slave_state.read_callback1 = read_callback;
+ 26a:	0a200513          	li	a0,162
+ 26e:	d388                	sw	a0,32(a5)
+	i2c_slave_state.read_only1 = read_only;
+ 270:	02078223          	sb	zero,36(a5)
+	i2c_slave_state.write_callback2 = NULL;
+ 274:	0207a423          	sw	zero,40(a5)
+	i2c_slave_state.read_callback2 = NULL;
+ 278:	0207a623          	sw	zero,44(a5)
+	i2c_slave_state.read_only2 = false;
+ 27c:	02078823          	sb	zero,48(a5)
+
+	// Enable I2C1
+	RCC->APB1PCENR |= RCC_APB1Periph_I2C1;
+ 280:	4f5c                	lw	a5,28(a4)
+ 282:	00200537          	lui	a0,0x200
+ 286:	8fc9                	or	a5,a5,a0
+ 288:	cf5c                	sw	a5,28(a4)
+
+	// Reset I2C1 to init all regs
+	RCC->APB1PRSTR |= RCC_APB1Periph_I2C1;
+ 28a:	4b1c                	lw	a5,16(a4)
+ 28c:	8fc9                	or	a5,a5,a0
+ 28e:	cb1c                	sw	a5,16(a4)
+	RCC->APB1PRSTR &= ~RCC_APB1Periph_I2C1;
+ 290:	4b1c                	lw	a5,16(a4)
+ 292:	ffe00537          	lui	a0,0xffe00
+ 296:	157d                	add	a0,a0,-1 # ffdfffff <__global_pointer$+0xdfdff7ff>
+ 298:	8fe9                	and	a5,a5,a0
+ 29a:	cb1c                	sw	a5,16(a4)
+
+	I2C1->CTLR1 |= I2C_CTLR1_SWRST;
+ 29c:	400057b7          	lui	a5,0x40005
+ 2a0:	4007d703          	lhu	a4,1024(a5) # 40005400 <__global_pointer$+0x20004c00>
+ 2a4:	6521                	lui	a0,0x8
+ 2a6:	8f49                	or	a4,a4,a0
+ 2a8:	40e79023          	sh	a4,1024(a5)
+	I2C1->CTLR1 &= ~I2C_CTLR1_SWRST;
+ 2ac:	4007d703          	lhu	a4,1024(a5)
+ 2b0:	80000537          	lui	a0,0x80000
+ 2b4:	0746                	sll	a4,a4,0x11
+ 2b6:	8345                	srl	a4,a4,0x11
+ 2b8:	40e79023          	sh	a4,1024(a5)
+
+	// Set module clock frequency
+	uint32_t prerate = 2000000; // I2C Logic clock rate, must be higher than the bus clock rate
+	I2C1->CTLR2 |= ( FUNCONF_SYSTEM_CORE_CLOCK / prerate ) & I2C_CTLR2_FREQ;
+ 2bc:	4047d703          	lhu	a4,1028(a5)
+ 2c0:	01876713          	or	a4,a4,24
+ 2c4:	40e79223          	sh	a4,1028(a5)
+
+	// Enable interrupts
+	I2C1->CTLR2 |= I2C_CTLR2_ITBUFEN | I2C_CTLR2_ITEVTEN | I2C_CTLR2_ITERREN;
+ 2c8:	4047d703          	lhu	a4,1028(a5)
+ 2cc:	70076713          	or	a4,a4,1792
+ 2d0:	40e79223          	sh	a4,1028(a5)
+ 2d4:	40000737          	lui	a4,0x40000
+ 2d8:	10e6a023          	sw	a4,256(a3)
+ *
+ * @return  none
+ */
+RV_STATIC_INLINE void NVIC_SetPriority(IRQn_Type IRQn, uint8_t priority)
+{
+  NVIC->IPRIOR[(uint32_t)(IRQn)] = priority;
+ 2dc:	02000713          	li	a4,32
+ 2e0:	40e68f23          	sb	a4,1054(a3)
+  NVIC->IENR[((uint32_t)(IRQn) >> 5)] = (1 << ((uint32_t)(IRQn) & 0x1F));
+ 2e4:	10a6a023          	sw	a0,256(a3)
+  NVIC->IPRIOR[(uint32_t)(IRQn)] = priority;
+ 2e8:	40e68fa3          	sb	a4,1055(a3)
+	NVIC_EnableIRQ( I2C1_ER_IRQn ); // Error interrupt
+	NVIC_SetPriority( I2C1_ER_IRQn, 2 << 4 );
+
+	// Set clock configuration
+	uint32_t clockrate = 1000000; // I2C Bus clock rate, must be lower than the logic clock rate
+	I2C1->CKCFGR = ( ( FUNCONF_SYSTEM_CORE_CLOCK / ( 3 * clockrate ) ) & I2C_CKCFGR_CCR ) |
+ 2ec:	7761                	lui	a4,0xffff8
+ 2ee:	0741                	add	a4,a4,16 # ffff8010 <__global_pointer$+0xdfff7810>
+ 2f0:	40e79e23          	sh	a4,1052(a5)
+	// I2C1->CKCFGR = ((FUNCONF_SYSTEM_CORE_CLOCK/(25*clockrate))&I2C_CKCFGR_CCR) | I2C_CKCFGR_DUTY | I2C_CKCFGR_FS; //
+	// Fast mode 36% duty cycle I2C1->CKCFGR = (FUNCONF_SYSTEM_CORE_CLOCK/(2*clockrate))&I2C_CKCFGR_CCR; // Standard
+	// mode good to 100kHz
+
+	// Set I2C address
+	I2C1->OADDR1 = address << 1;
+ 2f4:	40b79423          	sh	a1,1032(a5)
+	I2C1->OADDR2 = 0;
+ 2f8:	40079623          	sh	zero,1036(a5)
+
+	// Enable I2C
+	I2C1->CTLR1 |= I2C_CTLR1_PE;
+ 2fc:	4007d703          	lhu	a4,1024(a5)
+#endif
+
+void DelaySysTick( uint32_t n )
+{
+#ifdef CH32V003
+	uint32_t targend = SysTick->CNT + n;
+ 300:	66bd                	lui	a3,0xf
+ 302:	00460593          	add	a1,a2,4
+ 306:	00176713          	or	a4,a4,1
+ 30a:	40e79023          	sh	a4,1024(a5)
+
+	// Acknowledge bytes when they are received
+	I2C1->CTLR1 |= I2C_CTLR1_ACK;
+ 30e:	4007d703          	lhu	a4,1024(a5)
+ 312:	a6068693          	add	a3,a3,-1440 # ea60 <main.c.d3001f23+0xca26>
+ 316:	40076713          	or	a4,a4,1024
+ 31a:	40e79023          	sh	a4,1024(a5)
+ *
+ * @return  none
+ */
+__attribute__( ( always_inline ) ) RV_STATIC_INLINE void __WFI(void)
+{
+  NVIC->SCTLR &= ~(1<<3);   // wfi
+ 31e:	e000f7b7          	lui	a5,0xe000f
+ 322:	d107a703          	lw	a4,-752(a5) # e000ed10 <__global_pointer$+0xc000e510>
+ 326:	9b5d                	and	a4,a4,-9
+ 328:	d0e7a823          	sw	a4,-752(a5)
+  asm volatile ("wfi");
+ 32c:	10500073          	wfi
+ 330:	0087a283          	lw	t0,8(a5)
+ 334:	92b6                	add	t0,t0,a3
+	while ( ( (int32_t)( SysTick->CNT - targend ) ) < 0 )
+ 336:	4798                	lw	a4,8(a5)
+ 338:	40570733          	sub	a4,a4,t0
+ 33c:	fe074de3          	bltz	a4,336 <main+0x192>
+	while ( 1 )
+	{
+		__WFI(); // halt until an event comes in
+		Delay_Ms( 10 ); // wait a bit for data to come in
+		// put the encoder data into the i2c queue to send
+		i2c_read_registers[0] = encoder_direction; // signed / unsigned?
+ 340:	8071c703          	lbu	a4,-2041(gp) # 20000007 <encoder_direction>
+ 344:	00e60223          	sb	a4,4(a2)
+		i2c_read_registers[1] = encoder_button_event;
+ 348:	8061c703          	lbu	a4,-2042(gp) # 20000006 <encoder_button_event>
+ 34c:	00e580a3          	sb	a4,1(a1)
+	while ( 1 )
+ 350:	bfc9                	j	322 <main+0x17e>
+
+00000352 <EXTI7_0_IRQHandler>:
+
+volatile int_least8_t encoder_direction;
+volatile int_least8_t encoder_button_event;
+
+void EXTI7_0_IRQHandler( void )
+{
+ 352:	1151                	add	sp,sp,-12
+ 354:	c03e                	sw	a5,0(sp)
+	// check if EXT1 [rotation] fired:
+	if ( EXTI->INTFR & EXTI_Line1 )
+ 356:	400107b7          	lui	a5,0x40010
+ 35a:	40078793          	add	a5,a5,1024 # 40010400 <__global_pointer$+0x2000fc00>
+ 35e:	4bdc                	lw	a5,20(a5)
+{
+ 360:	c436                	sw	a3,8(sp)
+ 362:	c23a                	sw	a4,4(sp)
+	if ( EXTI->INTFR & EXTI_Line1 )
+ 364:	8b89                	and	a5,a5,2
+ 366:	c79d                	beqz	a5,394 <EXTI7_0_IRQHandler+0x42>
+	{
+		// read the OTHER (non EXTI) encoder pin
+		if ( !( funDigitalRead( PA2 ) ) )
+ 368:	400117b7          	lui	a5,0x40011
+ 36c:	80078793          	add	a5,a5,-2048 # 40010800 <__global_pointer$+0x20010000>
+ 370:	479c                	lw	a5,8(a5)
+ 372:	8b91                	and	a5,a5,4
+ 374:	e7a1                	bnez	a5,3bc <EXTI7_0_IRQHandler+0x6a>
+			encoder_direction++;
+ 376:	8071c783          	lbu	a5,-2041(gp) # 20000007 <encoder_direction>
+ 37a:	0785                	add	a5,a5,1
+		else
+			encoder_direction--;
+ 37c:	07e2                	sll	a5,a5,0x18
+ 37e:	87e1                	sra	a5,a5,0x18
+ 380:	80f183a3          	sb	a5,-2041(gp) # 20000007 <encoder_direction>
+
+		// Acknowledge the interrupt
+		EXTI->INTFR |= EXTI_Line1;
+ 384:	400107b7          	lui	a5,0x40010
+ 388:	40078793          	add	a5,a5,1024 # 40010400 <__global_pointer$+0x2000fc00>
+ 38c:	4bd8                	lw	a4,20(a5)
+ 38e:	00276713          	or	a4,a4,2
+ 392:	cbd8                	sw	a4,20(a5)
+	}
+
+	// check if EXT4 [pushbutton] fired:
+	if ( EXTI->INTFR & EXTI_Line4 )
+ 394:	400107b7          	lui	a5,0x40010
+ 398:	40078793          	add	a5,a5,1024 # 40010400 <__global_pointer$+0x2000fc00>
+ 39c:	4bd8                	lw	a4,20(a5)
+ 39e:	8b41                	and	a4,a4,16
+ 3a0:	cb01                	beqz	a4,3b0 <EXTI7_0_IRQHandler+0x5e>
+	{
+		encoder_button_event = 1;
+ 3a2:	4685                	li	a3,1
+ 3a4:	80d18323          	sb	a3,-2042(gp) # 20000006 <encoder_button_event>
+		//  Acknowledge the interrupt
+		EXTI->INTFR |= EXTI_Line4;
+ 3a8:	4bd8                	lw	a4,20(a5)
+ 3aa:	01076713          	or	a4,a4,16
+ 3ae:	cbd8                	sw	a4,20(a5)
+	}
+}
+ 3b0:	46a2                	lw	a3,8(sp)
+ 3b2:	4712                	lw	a4,4(sp)
+ 3b4:	4782                	lw	a5,0(sp)
+ 3b6:	0131                	add	sp,sp,12
+ 3b8:	30200073          	mret
+			encoder_direction--;
+ 3bc:	8071c783          	lbu	a5,-2041(gp) # 20000007 <encoder_direction>
+ 3c0:	17fd                	add	a5,a5,-1
+ 3c2:	bf6d                	j	37c <EXTI7_0_IRQHandler+0x2a>
+
+000003c4 <I2C1_EV_IRQHandler>:
+	i2c_slave_state.read_only2 = read_only;
+}
+
+void I2C1_EV_IRQHandler( void ) __attribute__( ( interrupt ) );
+void I2C1_EV_IRQHandler( void )
+{
+ 3c4:	7179                	add	sp,sp,-48
+ 3c6:	c03e                	sw	a5,0(sp)
+	uint16_t STAR1, STAR2 __attribute__( ( unused ) );
+	STAR1 = I2C1->STAR1;
+ 3c8:	400057b7          	lui	a5,0x40005
+{
+ 3cc:	c23a                	sw	a4,4(sp)
+	STAR1 = I2C1->STAR1;
+ 3ce:	4147d703          	lhu	a4,1044(a5) # 40005414 <__global_pointer$+0x20004c14>
+ 3d2:	40078793          	add	a5,a5,1024
+	STAR2 = I2C1->STAR2;
+ 3d6:	0187d783          	lhu	a5,24(a5)
+{
+ 3da:	cc26                	sw	s1,24(sp)
+ 3dc:	d606                	sw	ra,44(sp)
+	STAR1 = I2C1->STAR1;
+ 3de:	01071493          	sll	s1,a4,0x10
+{
+ 3e2:	d416                	sw	t0,40(sp)
+ 3e4:	d21a                	sw	t1,36(sp)
+ 3e6:	d01e                	sw	t2,32(sp)
+ 3e8:	ce22                	sw	s0,28(sp)
+ 3ea:	ca2a                	sw	a0,20(sp)
+ 3ec:	c82e                	sw	a1,16(sp)
+ 3ee:	c632                	sw	a2,12(sp)
+ 3f0:	c436                	sw	a3,8(sp)
+
+	if ( STAR1 & I2C_STAR1_ADDR )
+ 3f2:	8b09                	and	a4,a4,2
+	STAR1 = I2C1->STAR1;
+ 3f4:	80c1                	srl	s1,s1,0x10
+	if ( STAR1 & I2C_STAR1_ADDR )
+ 3f6:	c315                	beqz	a4,41a <I2C1_EV_IRQHandler+0x56>
+	{ // Start event
+		i2c_slave_state.first_write = 1; // Next write will be the offset
+ 3f8:	20000737          	lui	a4,0x20000
+ 3fc:	00870713          	add	a4,a4,8 # 20000008 <i2c_slave_state>
+ 400:	4685                	li	a3,1
+ 402:	07c2                	sll	a5,a5,0x10
+ 404:	83c1                	srl	a5,a5,0x10
+ 406:	00d70023          	sb	a3,0(a4)
+		i2c_slave_state.position = i2c_slave_state.offset; // Reset position
+ 40a:	00174683          	lbu	a3,1(a4)
+		i2c_slave_state.address2matched = !!( STAR2 & I2C_STAR2_DUALF );
+ 40e:	839d                	srl	a5,a5,0x7
+ 410:	8b85                	and	a5,a5,1
+		i2c_slave_state.position = i2c_slave_state.offset; // Reset position
+ 412:	00d70123          	sb	a3,2(a4)
+		i2c_slave_state.address2matched = !!( STAR2 & I2C_STAR2_DUALF );
+ 416:	02f70923          	sb	a5,50(a4)
+	}
+
+	if ( STAR1 & I2C_STAR1_RXNE )
+ 41a:	0404f793          	and	a5,s1,64
+ 41e:	cb85                	beqz	a5,44e <I2C1_EV_IRQHandler+0x8a>
+	{ // Write event
+		if ( i2c_slave_state.first_write )
+ 420:	200007b7          	lui	a5,0x20000
+ 424:	00878793          	add	a5,a5,8 # 20000008 <i2c_slave_state>
+ 428:	0007c703          	lbu	a4,0(a5)
+ 42c:	c769                	beqz	a4,4f6 <I2C1_EV_IRQHandler+0x132>
+		{ // First byte written, set the offset
+			i2c_slave_state.offset = I2C1->DATAR;
+ 42e:	40005737          	lui	a4,0x40005
+ 432:	40070713          	add	a4,a4,1024 # 40005400 <__global_pointer$+0x20004c00>
+ 436:	01075703          	lhu	a4,16(a4)
+			i2c_slave_state.position = i2c_slave_state.offset;
+			i2c_slave_state.first_write = 0;
+ 43a:	00078023          	sb	zero,0(a5)
+			i2c_slave_state.writing = false;
+ 43e:	020788a3          	sb	zero,49(a5)
+			i2c_slave_state.offset = I2C1->DATAR;
+ 442:	0ff77713          	zext.b	a4,a4
+ 446:	00e780a3          	sb	a4,1(a5)
+			i2c_slave_state.position = i2c_slave_state.offset;
+ 44a:	00e78123          	sb	a4,2(a5)
+				}
+			}
+		}
+	}
+
+	if ( STAR1 & I2C_STAR1_TXE )
+ 44e:	0804f793          	and	a5,s1,128
+ 452:	c7b1                	beqz	a5,49e <I2C1_EV_IRQHandler+0xda>
+	{ // Read event
+		i2c_slave_state.writing = false;
+ 454:	20000437          	lui	s0,0x20000
+ 458:	00840793          	add	a5,s0,8 # 20000008 <i2c_slave_state>
+		if ( i2c_slave_state.address2matched )
+ 45c:	0327c703          	lbu	a4,50(a5)
+		{
+			if ( i2c_slave_state.position < i2c_slave_state.read_size2 )
+ 460:	0027c503          	lbu	a0,2(a5)
+		i2c_slave_state.writing = false;
+ 464:	020788a3          	sb	zero,49(a5)
+		if ( i2c_slave_state.address2matched )
+ 468:	400057b7          	lui	a5,0x40005
+ 46c:	40078793          	add	a5,a5,1024 # 40005400 <__global_pointer$+0x20004c00>
+ 470:	00840413          	add	s0,s0,8
+ 474:	cb79                	beqz	a4,54a <I2C1_EV_IRQHandler+0x186>
+			if ( i2c_slave_state.position < i2c_slave_state.read_size2 )
+ 476:	01844703          	lbu	a4,24(s0)
+ 47a:	0ee57663          	bgeu	a0,a4,566 <I2C1_EV_IRQHandler+0x1a2>
+			{
+				I2C1->DATAR = i2c_slave_state.read_registers2[i2c_slave_state.position];
+ 47e:	4818                	lw	a4,16(s0)
+ 480:	972a                	add	a4,a4,a0
+ 482:	00074703          	lbu	a4,0(a4)
+ 486:	0ff77713          	zext.b	a4,a4
+ 48a:	00e79823          	sh	a4,16(a5)
+				if ( i2c_slave_state.read_callback2 != NULL )
+ 48e:	545c                	lw	a5,44(s0)
+		else
+		{
+			if ( i2c_slave_state.position < i2c_slave_state.read_size1 )
+			{
+				I2C1->DATAR = i2c_slave_state.read_registers1[i2c_slave_state.position];
+				if ( i2c_slave_state.read_callback1 != NULL )
+ 490:	c391                	beqz	a5,494 <I2C1_EV_IRQHandler+0xd0>
+				{
+					i2c_slave_state.read_callback1( i2c_slave_state.position );
+ 492:	9782                	jalr	a5
+				}
+				i2c_slave_state.position++;
+ 494:	00244783          	lbu	a5,2(s0)
+ 498:	0785                	add	a5,a5,1
+ 49a:	00f40123          	sb	a5,2(s0)
+				I2C1->DATAR = 0x00;
+			}
+		}
+	}
+
+	if ( STAR1 & I2C_STAR1_STOPF )
+ 49e:	88c1                	and	s1,s1,16
+ 4a0:	cc85                	beqz	s1,4d8 <I2C1_EV_IRQHandler+0x114>
+	{ // Stop event
+		I2C1->CTLR1 &= ~( I2C_CTLR1_STOP ); // Clear stop
+ 4a2:	400057b7          	lui	a5,0x40005
+ 4a6:	4007d703          	lhu	a4,1024(a5) # 40005400 <__global_pointer$+0x20004c00>
+ 4aa:	66c1                	lui	a3,0x10
+ 4ac:	dff68693          	add	a3,a3,-513 # fdff <main.c.d3001f23+0xddc5>
+ 4b0:	8f75                	and	a4,a4,a3
+ 4b2:	40e79023          	sh	a4,1024(a5)
+		if ( i2c_slave_state.address2matched )
+ 4b6:	200007b7          	lui	a5,0x20000
+ 4ba:	00878793          	add	a5,a5,8 # 20000008 <i2c_slave_state>
+ 4be:	0327c703          	lbu	a4,50(a5)
+ 4c2:	c74d                	beqz	a4,56c <I2C1_EV_IRQHandler+0x1a8>
+		{
+			if ( i2c_slave_state.write_callback2 != NULL )
+ 4c4:	5798                	lw	a4,40(a5)
+					i2c_slave_state.offset, i2c_slave_state.position - i2c_slave_state.offset );
+			}
+		}
+		else
+		{
+			if ( i2c_slave_state.write_callback1 != NULL )
+ 4c6:	cb09                	beqz	a4,4d8 <I2C1_EV_IRQHandler+0x114>
+			{
+				i2c_slave_state.write_callback1(
+ 4c8:	0017c503          	lbu	a0,1(a5)
+ 4cc:	0027c583          	lbu	a1,2(a5)
+ 4d0:	8d89                	sub	a1,a1,a0
+ 4d2:	0ff5f593          	zext.b	a1,a1
+ 4d6:	9702                	jalr	a4
+					i2c_slave_state.offset, i2c_slave_state.position - i2c_slave_state.offset );
+			}
+		}
+	}
+}
+ 4d8:	4472                	lw	s0,28(sp)
+ 4da:	50b2                	lw	ra,44(sp)
+ 4dc:	52a2                	lw	t0,40(sp)
+ 4de:	5312                	lw	t1,36(sp)
+ 4e0:	5382                	lw	t2,32(sp)
+ 4e2:	44e2                	lw	s1,24(sp)
+ 4e4:	4552                	lw	a0,20(sp)
+ 4e6:	45c2                	lw	a1,16(sp)
+ 4e8:	4632                	lw	a2,12(sp)
+ 4ea:	46a2                	lw	a3,8(sp)
+ 4ec:	4712                	lw	a4,4(sp)
+ 4ee:	4782                	lw	a5,0(sp)
+ 4f0:	6145                	add	sp,sp,48
+ 4f2:	30200073          	mret
+			if ( i2c_slave_state.address2matched )
+ 4f6:	0327c683          	lbu	a3,50(a5)
+			i2c_slave_state.writing = true;
+ 4fa:	4705                	li	a4,1
+ 4fc:	02e788a3          	sb	a4,49(a5)
+				if ( i2c_slave_state.position < i2c_slave_state.write_size2 && !i2c_slave_state.read_only2 )
+ 500:	0027c703          	lbu	a4,2(a5)
+			if ( i2c_slave_state.address2matched )
+ 504:	c695                	beqz	a3,530 <I2C1_EV_IRQHandler+0x16c>
+				if ( i2c_slave_state.position < i2c_slave_state.write_size2 && !i2c_slave_state.read_only2 )
+ 506:	0197c683          	lbu	a3,25(a5)
+ 50a:	f4d772e3          	bgeu	a4,a3,44e <I2C1_EV_IRQHandler+0x8a>
+ 50e:	0307c683          	lbu	a3,48(a5)
+ 512:	fe95                	bnez	a3,44e <I2C1_EV_IRQHandler+0x8a>
+					i2c_slave_state.write_registers2[i2c_slave_state.position] = I2C1->DATAR;
+ 514:	400056b7          	lui	a3,0x40005
+ 518:	4106d603          	lhu	a2,1040(a3) # 40005410 <__global_pointer$+0x20004c10>
+ 51c:	4bd4                	lw	a3,20(a5)
+					i2c_slave_state.write_registers1[i2c_slave_state.position] = I2C1->DATAR;
+ 51e:	96ba                	add	a3,a3,a4
+ 520:	0ff67613          	zext.b	a2,a2
+ 524:	00c68023          	sb	a2,0(a3)
+					i2c_slave_state.position++;
+ 528:	0705                	add	a4,a4,1
+ 52a:	00e78123          	sb	a4,2(a5)
+ 52e:	b705                	j	44e <I2C1_EV_IRQHandler+0x8a>
+				if ( i2c_slave_state.position < i2c_slave_state.write_size1 && !i2c_slave_state.read_only1 )
+ 530:	00d7c683          	lbu	a3,13(a5)
+ 534:	f0d77de3          	bgeu	a4,a3,44e <I2C1_EV_IRQHandler+0x8a>
+ 538:	0247c683          	lbu	a3,36(a5)
+ 53c:	fa89                	bnez	a3,44e <I2C1_EV_IRQHandler+0x8a>
+					i2c_slave_state.write_registers1[i2c_slave_state.position] = I2C1->DATAR;
+ 53e:	400056b7          	lui	a3,0x40005
+ 542:	4106d603          	lhu	a2,1040(a3) # 40005410 <__global_pointer$+0x20004c10>
+ 546:	4794                	lw	a3,8(a5)
+ 548:	bfd9                	j	51e <I2C1_EV_IRQHandler+0x15a>
+			if ( i2c_slave_state.position < i2c_slave_state.read_size1 )
+ 54a:	00c44703          	lbu	a4,12(s0)
+ 54e:	00e57c63          	bgeu	a0,a4,566 <I2C1_EV_IRQHandler+0x1a2>
+				I2C1->DATAR = i2c_slave_state.read_registers1[i2c_slave_state.position];
+ 552:	4058                	lw	a4,4(s0)
+ 554:	972a                	add	a4,a4,a0
+ 556:	00074703          	lbu	a4,0(a4)
+ 55a:	0ff77713          	zext.b	a4,a4
+ 55e:	00e79823          	sh	a4,16(a5)
+				if ( i2c_slave_state.read_callback1 != NULL )
+ 562:	501c                	lw	a5,32(s0)
+ 564:	b735                	j	490 <I2C1_EV_IRQHandler+0xcc>
+				I2C1->DATAR = 0x00;
+ 566:	00079823          	sh	zero,16(a5)
+ 56a:	bf15                	j	49e <I2C1_EV_IRQHandler+0xda>
+			if ( i2c_slave_state.write_callback1 != NULL )
+ 56c:	4fd8                	lw	a4,28(a5)
+ 56e:	bfa1                	j	4c6 <I2C1_EV_IRQHandler+0x102>
+
+00000570 <I2C1_ER_IRQHandler>:
+
+void I2C1_ER_IRQHandler( void ) __attribute__( ( interrupt ) );
+void I2C1_ER_IRQHandler( void )
+{
+ 570:	1141                	add	sp,sp,-16
+ 572:	c03e                	sw	a5,0(sp)
+	uint16_t STAR1 = I2C1->STAR1;
+ 574:	400057b7          	lui	a5,0x40005
+{
+ 578:	c436                	sw	a3,8(sp)
+	uint16_t STAR1 = I2C1->STAR1;
+ 57a:	4147d683          	lhu	a3,1044(a5) # 40005414 <__global_pointer$+0x20004c14>
+{
+ 57e:	c23a                	sw	a4,4(sp)
+ 580:	c632                	sw	a2,12(sp)
+	uint16_t STAR1 = I2C1->STAR1;
+ 582:	01069713          	sll	a4,a3,0x10
+
+	if ( STAR1 & I2C_STAR1_BERR )
+ 586:	1006f693          	and	a3,a3,256
+	uint16_t STAR1 = I2C1->STAR1;
+ 58a:	8341                	srl	a4,a4,0x10
+	if ( STAR1 & I2C_STAR1_BERR )
+ 58c:	ca99                	beqz	a3,5a2 <I2C1_ER_IRQHandler+0x32>
+	{ // Bus error
+		I2C1->STAR1 &= ~( I2C_STAR1_BERR ); // Clear error
+ 58e:	4147d683          	lhu	a3,1044(a5)
+ 592:	6641                	lui	a2,0x10
+ 594:	eff60613          	add	a2,a2,-257 # feff <main.c.d3001f23+0xdec5>
+ 598:	8ef1                	and	a3,a3,a2
+ 59a:	40078793          	add	a5,a5,1024
+ 59e:	00d79a23          	sh	a3,20(a5)
+	}
+
+	if ( STAR1 & I2C_STAR1_ARLO )
+ 5a2:	20077793          	and	a5,a4,512
+ 5a6:	cb99                	beqz	a5,5bc <I2C1_ER_IRQHandler+0x4c>
+	{ // Arbitration lost error
+		I2C1->STAR1 &= ~( I2C_STAR1_ARLO ); // Clear error
+ 5a8:	400057b7          	lui	a5,0x40005
+ 5ac:	4147d683          	lhu	a3,1044(a5) # 40005414 <__global_pointer$+0x20004c14>
+ 5b0:	6641                	lui	a2,0x10
+ 5b2:	dff60613          	add	a2,a2,-513 # fdff <main.c.d3001f23+0xddc5>
+ 5b6:	8ef1                	and	a3,a3,a2
+ 5b8:	40d79a23          	sh	a3,1044(a5)
+	}
+
+	if ( STAR1 & I2C_STAR1_AF )
+ 5bc:	40077713          	and	a4,a4,1024
+ 5c0:	cb19                	beqz	a4,5d6 <I2C1_ER_IRQHandler+0x66>
+	{ // Acknowledge failure
+		I2C1->STAR1 &= ~( I2C_STAR1_AF ); // Clear error
+ 5c2:	400057b7          	lui	a5,0x40005
+ 5c6:	4147d703          	lhu	a4,1044(a5) # 40005414 <__global_pointer$+0x20004c14>
+ 5ca:	66c1                	lui	a3,0x10
+ 5cc:	bff68693          	add	a3,a3,-1025 # fbff <main.c.d3001f23+0xdbc5>
+ 5d0:	8f75                	and	a4,a4,a3
+ 5d2:	40e79a23          	sh	a4,1044(a5)
+	}
+}
+ 5d6:	4632                	lw	a2,12(sp)
+ 5d8:	46a2                	lw	a3,8(sp)
+ 5da:	4712                	lw	a4,4(sp)
+ 5dc:	4782                	lw	a5,0(sp)
+ 5de:	0141                	add	sp,sp,16
+ 5e0:	30200073          	mret

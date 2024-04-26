@@ -1,0 +1,36 @@
+{
+	"configurations": [
+		{
+			"name": "(minichlink) Launch",
+			"type": "cppdbg",
+			"request": "launch",
+			"preLaunchTask": "${defaultBuildTask}",
+			"program": "${workspaceFolder}/main.elf",
+			"stopAtEntry": false,
+			"cwd": "${workspaceRoot}",
+			"svdPath": "${workspaceFolder}/misc/CH32V003xx.svd", // extension 'Peripheral Viewer' by mcu-debug (cortex-debug)
+			"MIMode": "gdb",
+			"debugServerPath": "minichlink",
+			"debugServerArgs": "-aG",
+			"miDebuggerPath": "gdb-multiarch",
+			"miDebuggerServerAddress": "localhost:2000",
+			"setupCommands": [
+				{
+					"description": "Enable pretty-printing for gdb",
+					"text": "-enable-pretty-printing",
+					"ignoreFailures": true,
+				},
+			],
+			"filterStderr": true,
+			"serverStarted": "gdbserver running",
+			"externalConsole": true,
+			"logging": {
+				"engineLogging": true,
+				"moduleLoad": true,
+				"trace": true,
+				"programOutput": true,
+				"exceptions": true
+			}
+		}
+	]
+}
