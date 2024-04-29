@@ -4,7 +4,7 @@ Usage / notes
 - configured for a CH32V003 SOP8 package
 - encoder inputs are connected to PA1 and PA2
 - encoder pushbutton is connected to PC4
-- all encoder pins are externally RC debounced and pulled up [todo: add schematic]
+- all encoder pins are externally RC debounced and pulled up [ see /hardware for schematic ]
 - device is configured as an i2c slave device on address 0x09.
 - 'read' two bytes: the first byte is the rotation value, and the second byte indicates whether the button has been pressed
 - values are reset to zero after a read
