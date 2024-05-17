@@ -107,8 +107,10 @@ void SetupI2CSlave( uint8_t address, volatile uint8_t *read_registers, uint8_t r
 	I2C1->CKCFGR = ( ( FUNCONF_SYSTEM_CORE_CLOCK / ( 3 * clockrate ) ) & I2C_CKCFGR_CCR ) |
 	               I2C_CKCFGR_FS; // Fast mode 33% duty cycle
 	// I2C1->CKCFGR = ((FUNCONF_SYSTEM_CORE_CLOCK/(25*clockrate))&I2C_CKCFGR_CCR) | I2C_CKCFGR_DUTY | I2C_CKCFGR_FS; //
-	// Fast mode 36% duty cycle I2C1->CKCFGR = (FUNCONF_SYSTEM_CORE_CLOCK/(2*clockrate))&I2C_CKCFGR_CCR; // Standard
-	// mode good to 100kHz
+	// Fast mode 36% duty cycle
+
+	// I2C1->CKCFGR = (FUNCONF_SYSTEM_CORE_CLOCK/(2*clockrate))&I2C_CKCFGR_CCR;
+	// Standard mode good to 100kHz
 
 	// Set I2C address
 	I2C1->OADDR1 = address << 1;

@@ -3,6 +3,33 @@
 
 #define CH32V003 1
 
+
+/*****************************************************************************
+    CH32V003 Fun Configs:
+
+#define FUNCONF_USE_PLL 1               // Use built-in 2x PLL
+#define FUNCONF_USE_HSI 1               // Use HSI Internal Oscillator
+#define FUNCONF_USE_HSE 0               // Use External Oscillator
+#define FUNCONF_HSITRIM 0x10            // Use factory calibration on HSI Trim.
+#define FUNCONF_SYSTEM_CORE_CLOCK 48000000  // Computed Clock in Hz (Default only for 003, other chips have other
+defaults)
+#define FUNCONF_HSE_BYPASS 0            // Use HSE Bypass feature (for oscillator input)
+#define
+FUNCONF_USE_CLK_SEC	1			// Use clock security system, enabled by default
+#define FUNCONF_USE_DEBUGPRINTF 1
+#define FUNCONF_USE_UARTPRINTF  0
+#define FUNCONF_NULL_PRINTF 0           // Have printf but direct it "nowhere"
+#define FUNCONF_SYSTICK_USE_HCLK 0      // Should systick be at 48 MHz or 6MHz?
+#define FUNCONF_TINYVECTOR 0            // If enabled, Does not allow normal interrupts.
+#define FUNCONF_UART_PRINTF_BAUD 115200 // Only used if FUNCONF_USE_UARTPRINTF is set.
+#define FUNCONF_DEBUGPRINTF_TIMEOUT 160000 // Arbitrary time units
+*/
+
+#define FUNCONF_USE_PLL 0
+#define FUNCONF_SYSTEM_CORE_CLOCK 24000000
+#define FUNCONF_NULL_PRINTF 0
+
+
 #define BREAKPT() __asm( "C.EBREAK" ) // software breakpoint
 
 #define AFIO_EXTICR_EXTI0 ( (uint16_t)0x0003 ) /* EXTI 0 configuration */
@@ -32,16 +59,6 @@
 #define AFIO_EXTICR_EXTI6_PD ( (uint16_t)0x3000 ) /* PD[6] pin */
 #define AFIO_EXTICR_EXTI7_PC ( (uint16_t)0x8000 ) /* PC[7] pin */
 #define AFIO_EXTICR_EXTI7_PD ( (uint16_t)0xC000 ) /* PD[7] pin */
-
-
-#define GPIO_CFGLR_Pin0 ( 4 * 0 )
-#define GPIO_CFGLR_Pin1 ( 4 * 1 )
-#define GPIO_CFGLR_Pin2 ( 4 * 2 )
-#define GPIO_CFGLR_Pin3 ( 4 * 3 )
-#define GPIO_CFGLR_Pin4 ( 4 * 4 )
-#define GPIO_CFGLR_Pin5 ( 4 * 5 )
-#define GPIO_CFGLR_Pin6 ( 4 * 6 )
-#define GPIO_CFGLR_Pin7 ( 4 * 7 )
 
 
 #endif

@@ -67,10 +67,11 @@ int main( void )
 
 	while ( 1 )
 	{
-		__WFI(); // halt until an event comes in
-		Delay_Ms( 10 ); // wait a bit for data to come in
+		//__WFI(); // halt until an event comes in
 		// put the encoder data into the i2c queue to send
+		Delay_Ms( 100 );
 		i2c_read_registers[0] = encoder_direction; // signed / unsigned?
 		i2c_read_registers[1] = encoder_button_event;
+		printf( "got: %2x %2x \n", i2c_read_registers[0], i2c_read_registers[1] );
 	}
 }

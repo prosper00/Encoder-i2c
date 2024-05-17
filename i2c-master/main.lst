@@ -1,0 +1,1117 @@
+
+main.elf:     file format elf32-littleriscv
+
+
+Disassembly of section .init:
+
+00000000 <InterruptVector>:
+   0:	4460006f          	j	446 <handle_reset>
+   4:	00000000          	.word	0x00000000
+   8:	000004c4          	.word	0x000004c4
+   c:	000004c0          	.word	0x000004c0
+	...
+  30:	000004c0          	.word	0x000004c0
+  34:	00000000          	.word	0x00000000
+  38:	000004c0          	.word	0x000004c0
+  3c:	00000000          	.word	0x00000000
+  40:	000004c0          	.word	0x000004c0
+  44:	000004c0          	.word	0x000004c0
+  48:	000004c0          	.word	0x000004c0
+  4c:	000004c0          	.word	0x000004c0
+  50:	000004c0          	.word	0x000004c0
+  54:	000004c0          	.word	0x000004c0
+  58:	000004c0          	.word	0x000004c0
+  5c:	000004c0          	.word	0x000004c0
+  60:	000004c0          	.word	0x000004c0
+  64:	000004c0          	.word	0x000004c0
+  68:	000004c0          	.word	0x000004c0
+  6c:	000004c0          	.word	0x000004c0
+  70:	000004c0          	.word	0x000004c0
+  74:	000004c0          	.word	0x000004c0
+  78:	00000844          	.word	0x00000844
+  7c:	0000096c          	.word	0x0000096c
+  80:	000004c0          	.word	0x000004c0
+  84:	000004c0          	.word	0x000004c0
+  88:	000004c0          	.word	0x000004c0
+  8c:	000004c0          	.word	0x000004c0
+  90:	000004c0          	.word	0x000004c0
+  94:	000004c0          	.word	0x000004c0
+  98:	000004c0          	.word	0x000004c0
+  9c:	0000                	.insn	2, 0x
+	...
+
+Disassembly of section .text:
+
+000000a0 <__divsi3>:
+  a0:	02054e63          	bltz	a0,dc <__umodsi3+0x8>
+  a4:	0405c363          	bltz	a1,ea <__umodsi3+0x16>
+
+000000a8 <__hidden___udivsi3>:
+  a8:	862e                	mv	a2,a1
+  aa:	85aa                	mv	a1,a0
+  ac:	557d                	li	a0,-1
+  ae:	c215                	beqz	a2,d2 <__hidden___udivsi3+0x2a>
+  b0:	4685                	li	a3,1
+  b2:	00b67863          	bgeu	a2,a1,c2 <__hidden___udivsi3+0x1a>
+  b6:	00c05663          	blez	a2,c2 <__hidden___udivsi3+0x1a>
+  ba:	0606                	sll	a2,a2,0x1
+  bc:	0686                	sll	a3,a3,0x1
+  be:	feb66ce3          	bltu	a2,a1,b6 <__hidden___udivsi3+0xe>
+  c2:	4501                	li	a0,0
+  c4:	00c5e463          	bltu	a1,a2,cc <__hidden___udivsi3+0x24>
+  c8:	8d91                	sub	a1,a1,a2
+  ca:	8d55                	or	a0,a0,a3
+  cc:	8285                	srl	a3,a3,0x1
+  ce:	8205                	srl	a2,a2,0x1
+  d0:	faf5                	bnez	a3,c4 <__hidden___udivsi3+0x1c>
+  d2:	8082                	ret
+
+000000d4 <__umodsi3>:
+  d4:	8286                	mv	t0,ra
+  d6:	3fc9                	jal	a8 <__hidden___udivsi3>
+  d8:	852e                	mv	a0,a1
+  da:	8282                	jr	t0
+  dc:	40a00533          	neg	a0,a0
+  e0:	00b04763          	bgtz	a1,ee <__umodsi3+0x1a>
+  e4:	40b005b3          	neg	a1,a1
+  e8:	b7c1                	j	a8 <__hidden___udivsi3>
+  ea:	40b005b3          	neg	a1,a1
+  ee:	8286                	mv	t0,ra
+  f0:	3f65                	jal	a8 <__hidden___udivsi3>
+  f2:	40a00533          	neg	a0,a0
+  f6:	8282                	jr	t0
+
+000000f8 <__modsi3>:
+  f8:	8286                	mv	t0,ra
+  fa:	0005c763          	bltz	a1,108 <__modsi3+0x10>
+  fe:	00054963          	bltz	a0,110 <__modsi3+0x18>
+ 102:	375d                	jal	a8 <__hidden___udivsi3>
+ 104:	852e                	mv	a0,a1
+ 106:	8282                	jr	t0
+ 108:	40b005b3          	neg	a1,a1
+ 10c:	fe055be3          	bgez	a0,102 <__modsi3+0xa>
+ 110:	40a00533          	neg	a0,a0
+ 114:	3f51                	jal	a8 <__hidden___udivsi3>
+ 116:	40b00533          	neg	a0,a1
+ 11a:	8282                	jr	t0
+	...
+
+0000011e <mini_pad>:
+ 11e:	1131                	add	sp,sp,-20
+ 120:	c426                	sw	s1,8(sp)
+ 122:	c806                	sw	ra,16(sp)
+ 124:	c622                	sw	s0,12(sp)
+ 126:	84ae                	mv	s1,a1
+ 128:	87aa                	mv	a5,a0
+ 12a:	85b2                	mv	a1,a2
+ 12c:	c699                	beqz	a3,13a <mini_pad+0x1c>
+ 12e:	4301                	li	t1,0
+ 130:	0096d763          	bge	a3,s1,13e <mini_pad+0x20>
+ 134:	84b6                	mv	s1,a3
+ 136:	4305                	li	t1,1
+ 138:	a019                	j	13e <mini_pad+0x20>
+ 13a:	4301                	li	t1,0
+ 13c:	86a6                	mv	a3,s1
+ 13e:	40968433          	sub	s0,a3,s1
+ 142:	00045363          	bgez	s0,148 <mini_pad+0x2a>
+ 146:	4401                	li	s0,0
+ 148:	8622                	mv	a2,s0
+ 14a:	853a                	mv	a0,a4
+ 14c:	c23e                	sw	a5,4(sp)
+ 14e:	c01a                	sw	t1,0(sp)
+ 150:	23bd                	jal	6be <memset>
+ 152:	4302                	lw	t1,0(sp)
+ 154:	4792                	lw	a5,4(sp)
+ 156:	872a                	mv	a4,a0
+ 158:	008506b3          	add	a3,a0,s0
+ 15c:	4601                	li	a2,0
+ 15e:	40c485b3          	sub	a1,s1,a2
+ 162:	04b04263          	bgtz	a1,1a6 <mini_pad+0x88>
+ 166:	0004d363          	bgez	s1,16c <mini_pad+0x4e>
+ 16a:	4481                	li	s1,0
+ 16c:	009685b3          	add	a1,a3,s1
+ 170:	40e58533          	sub	a0,a1,a4
+ 174:	02030463          	beqz	t1,19c <mini_pad+0x7e>
+ 178:	02b77263          	bgeu	a4,a1,19c <mini_pad+0x7e>
+ 17c:	02a00793          	li	a5,42
+ 180:	fef58fa3          	sb	a5,-1(a1)
+ 184:	fff58693          	add	a3,a1,-1
+ 188:	00d77a63          	bgeu	a4,a3,19c <mini_pad+0x7e>
+ 18c:	fef58f23          	sb	a5,-2(a1)
+ 190:	ffe58693          	add	a3,a1,-2
+ 194:	00d77463          	bgeu	a4,a3,19c <mini_pad+0x7e>
+ 198:	fef58ea3          	sb	a5,-3(a1)
+ 19c:	40c2                	lw	ra,16(sp)
+ 19e:	4432                	lw	s0,12(sp)
+ 1a0:	44a2                	lw	s1,8(sp)
+ 1a2:	0151                	add	sp,sp,20
+ 1a4:	8082                	ret
+ 1a6:	00c785b3          	add	a1,a5,a2
+ 1aa:	0005c503          	lbu	a0,0(a1)
+ 1ae:	00c685b3          	add	a1,a3,a2
+ 1b2:	0605                	add	a2,a2,1
+ 1b4:	00a58023          	sb	a0,0(a1)
+ 1b8:	b75d                	j	15e <mini_pad+0x40>
+
+000001ba <mini_itoa.part.0>:
+ 1ba:	1101                	add	sp,sp,-32
+ 1bc:	ce06                	sw	ra,28(sp)
+ 1be:	cc22                	sw	s0,24(sp)
+ 1c0:	ca26                	sw	s1,20(sp)
+ 1c2:	c002                	sw	zero,0(sp)
+ 1c4:	832a                	mv	t1,a0
+ 1c6:	00055763          	bgez	a0,1d4 <mini_itoa.part.0+0x1a>
+ 1ca:	e689                	bnez	a3,1d4 <mini_itoa.part.0+0x1a>
+ 1cc:	4785                	li	a5,1
+ 1ce:	40a00333          	neg	t1,a0
+ 1d2:	c03e                	sw	a5,0(sp)
+ 1d4:	8a05                	and	a2,a2,1
+ 1d6:	06100413          	li	s0,97
+ 1da:	c219                	beqz	a2,1e0 <mini_itoa.part.0+0x26>
+ 1dc:	04100413          	li	s0,65
+ 1e0:	84ba                	mv	s1,a4
+ 1e2:	1459                	add	s0,s0,-10
+ 1e4:	851a                	mv	a0,t1
+ 1e6:	c83a                	sw	a4,16(sp)
+ 1e8:	c21a                	sw	t1,4(sp)
+ 1ea:	c62e                	sw	a1,12(sp)
+ 1ec:	c41a                	sw	t1,8(sp)
+ 1ee:	35dd                	jal	d4 <__umodsi3>
+ 1f0:	47a5                	li	a5,9
+ 1f2:	4322                	lw	t1,8(sp)
+ 1f4:	45b2                	lw	a1,12(sp)
+ 1f6:	4742                	lw	a4,16(sp)
+ 1f8:	0ff57693          	zext.b	a3,a0
+ 1fc:	06a7e163          	bltu	a5,a0,25e <mini_itoa.part.0+0xa4>
+ 200:	03068693          	add	a3,a3,48
+ 204:	0ff6f693          	zext.b	a3,a3
+ 208:	00148793          	add	a5,s1,1
+ 20c:	00d48023          	sb	a3,0(s1)
+ 210:	851a                	mv	a0,t1
+ 212:	c83a                	sw	a4,16(sp)
+ 214:	c63e                	sw	a5,12(sp)
+ 216:	c42e                	sw	a1,8(sp)
+ 218:	3d41                	jal	a8 <__hidden___udivsi3>
+ 21a:	4692                	lw	a3,4(sp)
+ 21c:	45a2                	lw	a1,8(sp)
+ 21e:	47b2                	lw	a5,12(sp)
+ 220:	4742                	lw	a4,16(sp)
+ 222:	832a                	mv	t1,a0
+ 224:	02b6fb63          	bgeu	a3,a1,25a <mini_itoa.part.0+0xa0>
+ 228:	4682                	lw	a3,0(sp)
+ 22a:	c699                	beqz	a3,238 <mini_itoa.part.0+0x7e>
+ 22c:	02d00693          	li	a3,45
+ 230:	00d78023          	sb	a3,0(a5)
+ 234:	00248793          	add	a5,s1,2
+ 238:	40e78533          	sub	a0,a5,a4
+ 23c:	01f55693          	srl	a3,a0,0x1f
+ 240:	96aa                	add	a3,a3,a0
+ 242:	00078023          	sb	zero,0(a5)
+ 246:	8685                	sra	a3,a3,0x1
+ 248:	4601                	li	a2,0
+ 24a:	17fd                	add	a5,a5,-1
+ 24c:	00d64b63          	blt	a2,a3,262 <mini_itoa.part.0+0xa8>
+ 250:	40f2                	lw	ra,28(sp)
+ 252:	4462                	lw	s0,24(sp)
+ 254:	44d2                	lw	s1,20(sp)
+ 256:	6105                	add	sp,sp,32
+ 258:	8082                	ret
+ 25a:	84be                	mv	s1,a5
+ 25c:	b761                	j	1e4 <mini_itoa.part.0+0x2a>
+ 25e:	96a2                	add	a3,a3,s0
+ 260:	b755                	j	204 <mini_itoa.part.0+0x4a>
+ 262:	00c705b3          	add	a1,a4,a2
+ 266:	0007c283          	lbu	t0,0(a5)
+ 26a:	0005c303          	lbu	t1,0(a1)
+ 26e:	0605                	add	a2,a2,1
+ 270:	00558023          	sb	t0,0(a1)
+ 274:	00678023          	sb	t1,0(a5)
+ 278:	bfc9                	j	24a <mini_itoa.part.0+0x90>
+
+0000027a <i2c_setup>:
+}
+/*----------------------------------------------------------*/
+void i2c_setup()
+{
+	uint16_t tmpu16;
+	i2c_err_flags = 0;
+ 27a:	80019323          	sh	zero,-2042(gp) # 20000006 <i2c_err_flags>
+	RCC->APB1PRSTR |= RCC_APB1Periph_I2C1; // Reset I2C1 to init all regs
+ 27e:	400217b7          	lui	a5,0x40021
+ 282:	4b98                	lw	a4,16(a5)
+ 284:	002006b7          	lui	a3,0x200
+ 288:	8f55                	or	a4,a4,a3
+ 28a:	cb98                	sw	a4,16(a5)
+	RCC->APB1PRSTR &= ~RCC_APB1Periph_I2C1;
+ 28c:	4b98                	lw	a4,16(a5)
+ 28e:	ffe006b7          	lui	a3,0xffe00
+ 292:	16fd                	add	a3,a3,-1 # ffdfffff <__global_pointer$+0xdfdff7ff>
+ 294:	8f75                	and	a4,a4,a3
+ 296:	cb98                	sw	a4,16(a5)
+
+	tmpu16 = I2C1->CTLR2;
+ 298:	400057b7          	lui	a5,0x40005
+ 29c:	4047d703          	lhu	a4,1028(a5) # 40005404 <__global_pointer$+0x20004c04>
+	tmpu16 &= ~I2C_CTLR2_FREQ;
+ 2a0:	66c1                	lui	a3,0x10
+ 2a2:	fc068693          	add	a3,a3,-64 # ffc0 <main.c.e947e7e5+0xe224>
+ 2a6:	8f75                	and	a4,a4,a3
+	tmpu16 |= ( FUNCONF_SYSTEM_CORE_CLOCK / I2C_PRERATE ) & I2C_CTLR2_FREQ;
+ 2a8:	01876713          	or	a4,a4,24
+	I2C1->CTLR2 = tmpu16;
+ 2ac:	40e79223          	sh	a4,1028(a5)
+	tmpu16 = ( FUNCONF_SYSTEM_CORE_CLOCK / ( 25 * I2C_CLKRATE ) ) & I2C_CKCFGR_CCR;
+	tmpu16 |= I2C_CKCFGR_DUTY;
+#endif
+	tmpu16 |= I2C_CKCFGR_FS;
+#endif
+	I2C1->CKCFGR = tmpu16;
+ 2b0:	7771                	lui	a4,0xffffc
+ 2b2:	0711                	add	a4,a4,4 # ffffc004 <__global_pointer$+0xdfffb804>
+ 2b4:	40e79e23          	sh	a4,1052(a5)
+ *
+ * @return  none
+ */
+RV_STATIC_INLINE void NVIC_EnableIRQ(IRQn_Type IRQn)
+{
+  NVIC->IENR[((uint32_t)(IRQn) >> 5)] = (1 << ((uint32_t)(IRQn) & 0x1F));
+ 2b8:	400006b7          	lui	a3,0x40000
+ 2bc:	e000e737          	lui	a4,0xe000e
+ 2c0:	10d72023          	sw	a3,256(a4) # e000e100 <__global_pointer$+0xc000d900>
+ 2c4:	800006b7          	lui	a3,0x80000
+ 2c8:	10d72023          	sw	a3,256(a4)
+#ifdef I2C_MODE_IRQ
+	NVIC_EnableIRQ( I2C1_EV_IRQn ); // enable IRQ driven operation
+	NVIC_EnableIRQ( I2C1_ER_IRQn ); // Error interrupt
+	i2c_irq_state = 0; // initialize the state
+ 2cc:	800182a3          	sb	zero,-2043(gp) # 20000005 <i2c_irq_state>
+	I2C1->CTLR1 |= I2C_NACKPosition_Next;
+ 2d0:	4007d703          	lhu	a4,1024(a5)
+ 2d4:	6685                	lui	a3,0x1
+ 2d6:	80068693          	add	a3,a3,-2048 # 800 <main+0xb2>
+ 2da:	8f55                	or	a4,a4,a3
+ 2dc:	40e79023          	sh	a4,1024(a5)
+#endif
+	I2C1->CTLR1 |= I2C_CTLR1_PE; // Enable I2C
+ 2e0:	4007d703          	lhu	a4,1024(a5)
+ 2e4:	00176713          	or	a4,a4,1
+ 2e8:	40e79023          	sh	a4,1024(a5)
+}
+ 2ec:	8082                	ret
+
+000002ee <i2c_init>:
+	RCC->APB2PCENR |= I2C_PORT_RCC | RCC_APB2Periph_AFIO;
+ 2ee:	400217b7          	lui	a5,0x40021
+ 2f2:	4f98                	lw	a4,24(a5)
+	RCC->APB1PCENR |= RCC_APB1Periph_I2C1; // enable I2C
+ 2f4:	002006b7          	lui	a3,0x200
+	RCC->APB2PCENR |= I2C_PORT_RCC | RCC_APB2Periph_AFIO;
+ 2f8:	01176713          	or	a4,a4,17
+ 2fc:	cf98                	sw	a4,24(a5)
+	RCC->APB1PCENR |= RCC_APB1Periph_I2C1; // enable I2C
+ 2fe:	4fd8                	lw	a4,28(a5)
+ 300:	8f55                	or	a4,a4,a3
+ 302:	cfd8                	sw	a4,28(a5)
+	I2C_PORT->CFGLR &= ~( 0x0F << ( 4 * I2C_PIN_SDA ) );
+ 304:	400117b7          	lui	a5,0x40011
+ 308:	4398                	lw	a4,0(a5)
+	I2C_PORT->CFGLR &= ~( 0x0F << ( 4 * I2C_PIN_SCL ) );
+ 30a:	76fd                	lui	a3,0xfffff
+ 30c:	0ff68693          	add	a3,a3,255 # fffff0ff <__global_pointer$+0xdfffe8ff>
+	I2C_PORT->CFGLR &= ~( 0x0F << ( 4 * I2C_PIN_SDA ) );
+ 310:	f0f77713          	and	a4,a4,-241
+ 314:	c398                	sw	a4,0(a5)
+	I2C_PORT->CFGLR |= ( GPIO_Speed_10MHz | GPIO_CNF_OUT_OD_AF ) << ( 4 * I2C_PIN_SDA );
+ 316:	4398                	lw	a4,0(a5)
+ 318:	0d076713          	or	a4,a4,208
+ 31c:	c398                	sw	a4,0(a5)
+	I2C_PORT->CFGLR &= ~( 0x0F << ( 4 * I2C_PIN_SCL ) );
+ 31e:	4398                	lw	a4,0(a5)
+ 320:	8f75                	and	a4,a4,a3
+ 322:	c398                	sw	a4,0(a5)
+	I2C_PORT->CFGLR |= ( GPIO_Speed_10MHz | GPIO_CNF_OUT_OD_AF ) << ( 4 * I2C_PIN_SCL );
+ 324:	4398                	lw	a4,0(a5)
+ 326:	6685                	lui	a3,0x1
+ 328:	d0068693          	add	a3,a3,-768 # d00 <_data_lma+0x31c>
+ 32c:	8f55                	or	a4,a4,a3
+ 32e:	c398                	sw	a4,0(a5)
+	AFIO->PCFR1 &= I2C_AFIO_PCFR1_RESET_MASK;
+ 330:	400107b7          	lui	a5,0x40010
+ 334:	43d8                	lw	a4,4(a5)
+ 336:	ffc006b7          	lui	a3,0xffc00
+ 33a:	16f5                	add	a3,a3,-3 # ffbffffd <__global_pointer$+0xdfbff7fd>
+ 33c:	8f75                	and	a4,a4,a3
+ 33e:	c3d8                	sw	a4,4(a5)
+	AFIO->PCFR1 |= I2C_AFIO_PCFR1;
+ 340:	43d8                	lw	a4,4(a5)
+ 342:	c3d8                	sw	a4,4(a5)
+	i2c_setup();
+ 344:	bf1d                	j	27a <i2c_setup>
+
+00000346 <internal_handle_input.constprop.0>:
+ 346:	e00007b7          	lui	a5,0xe0000
+ 34a:	0f478793          	add	a5,a5,244 # e00000f4 <__global_pointer$+0xbffff8f4>
+ 34e:	439c                	lw	a5,0(a5)
+ 350:	8082                	ret
+
+00000352 <_write.constprop.0>:
+ 352:	1101                	add	sp,sp,-32
+ 354:	cc22                	sw	s0,24(sp)
+ 356:	ce06                	sw	ra,28(sp)
+ 358:	ca26                	sw	s1,20(sp)
+ 35a:	c02a                	sw	a0,0(sp)
+ 35c:	c802                	sw	zero,16(sp)
+ 35e:	842e                	mv	s0,a1
+ 360:	e1f9                	bnez	a1,426 <_write.constprop.0+0xd4>
+ 362:	e00007b7          	lui	a5,0xe0000
+ 366:	0f478793          	add	a5,a5,244 # e00000f4 <__global_pointer$+0xbffff8f4>
+ 36a:	439c                	lw	a5,0(a5)
+ 36c:	c789                	beqz	a5,376 <_write.constprop.0+0x24>
+ 36e:	0807f793          	and	a5,a5,128
+ 372:	e391                	bnez	a5,376 <_write.constprop.0+0x24>
+ 374:	3fc9                	jal	346 <internal_handle_input.constprop.0>
+ 376:	40f2                	lw	ra,28(sp)
+ 378:	8522                	mv	a0,s0
+ 37a:	4462                	lw	s0,24(sp)
+ 37c:	44d2                	lw	s1,20(sp)
+ 37e:	6105                	add	sp,sp,32
+ 380:	8082                	ret
+ 382:	409406b3          	sub	a3,s0,s1
+ 386:	461d                	li	a2,7
+ 388:	8736                	mv	a4,a3
+ 38a:	00d65363          	bge	a2,a3,390 <_write.constprop.0+0x3e>
+ 38e:	471d                	li	a4,7
+ 390:	00027637          	lui	a2,0x27
+ 394:	10160613          	add	a2,a2,257 # 27101 <main.c.e947e7e5+0x25365>
+ 398:	00032583          	lw	a1,0(t1)
+ 39c:	0805f513          	and	a0,a1,128
+ 3a0:	ed3d                	bnez	a0,41e <_write.constprop.0+0xcc>
+ 3a2:	c981                	beqz	a1,3b2 <_write.constprop.0+0x60>
+ 3a4:	c61a                	sw	t1,12(sp)
+ 3a6:	c43a                	sw	a4,8(sp)
+ 3a8:	c236                	sw	a3,4(sp)
+ 3aa:	3f71                	jal	346 <internal_handle_input.constprop.0>
+ 3ac:	4332                	lw	t1,12(sp)
+ 3ae:	4722                	lw	a4,8(sp)
+ 3b0:	4692                	lw	a3,4(sp)
+ 3b2:	0036a693          	slti	a3,a3,3
+ 3b6:	4601                	li	a2,0
+ 3b8:	e299                	bnez	a3,3be <_write.constprop.0+0x6c>
+ 3ba:	ffd70613          	add	a2,a4,-3
+ 3be:	4782                	lw	a5,0(sp)
+ 3c0:	00348593          	add	a1,s1,3
+ 3c4:	0808                	add	a0,sp,16
+ 3c6:	95be                	add	a1,a1,a5
+ 3c8:	c41a                	sw	t1,8(sp)
+ 3ca:	c23a                	sw	a4,4(sp)
+ 3cc:	2611                	jal	6d0 <memcpy>
+ 3ce:	4642                	lw	a2,16(sp)
+ 3d0:	4782                	lw	a5,0(sp)
+ 3d2:	e00006b7          	lui	a3,0xe0000
+ 3d6:	4322                	lw	t1,8(sp)
+ 3d8:	4712                	lw	a4,4(sp)
+ 3da:	0f868693          	add	a3,a3,248 # e00000f8 <__global_pointer$+0xbffff8f8>
+ 3de:	c290                	sw	a2,0(a3)
+ 3e0:	458d                	li	a1,3
+ 3e2:	00978633          	add	a2,a5,s1
+ 3e6:	4681                	li	a3,0
+ 3e8:	00064283          	lbu	t0,0(a2)
+ 3ec:	0685                	add	a3,a3,1
+ 3ee:	01068793          	add	a5,a3,16
+ 3f2:	00278533          	add	a0,a5,sp
+ 3f6:	00550023          	sb	t0,0(a0)
+ 3fa:	00d70563          	beq	a4,a3,404 <_write.constprop.0+0xb2>
+ 3fe:	0605                	add	a2,a2,1
+ 400:	feb694e3          	bne	a3,a1,3e8 <_write.constprop.0+0x96>
+ 404:	00470693          	add	a3,a4,4
+ 408:	f806e693          	or	a3,a3,-128
+ 40c:	00d10823          	sb	a3,16(sp)
+ 410:	46c2                	lw	a3,16(sp)
+ 412:	94ba                	add	s1,s1,a4
+ 414:	00d32023          	sw	a3,0(t1)
+ 418:	f684c5e3          	blt	s1,s0,382 <_write.constprop.0+0x30>
+ 41c:	bfa9                	j	376 <_write.constprop.0+0x24>
+ 41e:	167d                	add	a2,a2,-1
+ 420:	fe25                	bnez	a2,398 <_write.constprop.0+0x46>
+ 422:	8426                	mv	s0,s1
+ 424:	bf89                	j	376 <_write.constprop.0+0x24>
+ 426:	e0000337          	lui	t1,0xe0000
+ 42a:	4481                	li	s1,0
+ 42c:	0f430313          	add	t1,t1,244 # e00000f4 <__global_pointer$+0xbffff8f4>
+ 430:	b7e5                	j	418 <_write.constprop.0+0xc6>
+
+00000432 <__puts_uart>:
+ 432:	1151                	add	sp,sp,-12
+ 434:	c222                	sw	s0,4(sp)
+ 436:	c406                	sw	ra,8(sp)
+ 438:	842e                	mv	s0,a1
+ 43a:	3f21                	jal	352 <_write.constprop.0>
+ 43c:	40a2                	lw	ra,8(sp)
+ 43e:	8522                	mv	a0,s0
+ 440:	4412                	lw	s0,4(sp)
+ 442:	0131                	add	sp,sp,12
+ 444:	8082                	ret
+
+00000446 <handle_reset>:
+ 446:	20000197          	auipc	gp,0x20000
+ 44a:	3ba18193          	add	gp,gp,954 # 20000800 <__global_pointer$>
+ 44e:	00018113          	mv	sp,gp
+ 452:	08000513          	li	a0,128
+ 456:	30051073          	csrw	mstatus,a0
+ 45a:	468d                	li	a3,3
+ 45c:	00000517          	auipc	a0,0x0
+ 460:	ba450513          	add	a0,a0,-1116 # 0 <InterruptVector>
+ 464:	8d55                	or	a0,a0,a3
+ 466:	30551073          	csrw	mtvec,a0
+ 46a:	20000517          	auipc	a0,0x20000
+ 46e:	b9650513          	add	a0,a0,-1130 # 20000000 <i2c_data_ptr>
+ 472:	80818593          	add	a1,gp,-2040 # 20000008 <_ebss>
+ 476:	4601                	li	a2,0
+ 478:	00b55663          	bge	a0,a1,484 <handle_reset+0x3e>
+ 47c:	c110                	sw	a2,0(a0)
+ 47e:	0511                	add	a0,a0,4
+ 480:	feb54ee3          	blt	a0,a1,47c <handle_reset+0x36>
+ 484:	00000517          	auipc	a0,0x0
+ 488:	56050513          	add	a0,a0,1376 # 9e4 <_data_lma>
+ 48c:	20000597          	auipc	a1,0x20000
+ 490:	b7458593          	add	a1,a1,-1164 # 20000000 <i2c_data_ptr>
+ 494:	20000617          	auipc	a2,0x20000
+ 498:	b6c60613          	add	a2,a2,-1172 # 20000000 <i2c_data_ptr>
+ 49c:	00c58863          	beq	a1,a2,4ac <handle_reset+0x66>
+ 4a0:	4114                	lw	a3,0(a0)
+ 4a2:	c194                	sw	a3,0(a1)
+ 4a4:	0511                	add	a0,a0,4
+ 4a6:	0591                	add	a1,a1,4
+ 4a8:	fec59ae3          	bne	a1,a2,49c <handle_reset+0x56>
+ 4ac:	e000f7b7          	lui	a5,0xe000f
+ 4b0:	4705                	li	a4,1
+ 4b2:	c398                	sw	a4,0(a5)
+ 4b4:	74e00793          	li	a5,1870
+ 4b8:	34179073          	csrw	mepc,a5
+ 4bc:	30200073          	mret
+
+000004c0 <ADC1_IRQHandler>:
+ 4c0:	9002                	ebreak
+ 4c2:	a001                	j	4c2 <ADC1_IRQHandler+0x2>
+
+000004c4 <NMI_Handler>:
+ 4c4:	40021737          	lui	a4,0x40021
+ 4c8:	471c                	lw	a5,8(a4)
+ 4ca:	008006b7          	lui	a3,0x800
+ 4ce:	8fd5                	or	a5,a5,a3
+ 4d0:	c71c                	sw	a5,8(a4)
+
+000004d2 <strlen>:
+ 4d2:	87aa                	mv	a5,a0
+ 4d4:	0007c703          	lbu	a4,0(a5) # e000f000 <__global_pointer$+0xc000e800>
+ 4d8:	e701                	bnez	a4,4e0 <strlen+0xe>
+ 4da:	40a78533          	sub	a0,a5,a0
+ 4de:	8082                	ret
+ 4e0:	0785                	add	a5,a5,1
+ 4e2:	bfcd                	j	4d4 <strlen+0x2>
+
+000004e4 <mini_vpprintf>:
+ 4e4:	fa410113          	add	sp,sp,-92
+ 4e8:	caa2                	sw	s0,84(sp)
+ 4ea:	c8a6                	sw	s1,80(sp)
+ 4ec:	cc86                	sw	ra,88(sp)
+ 4ee:	c02a                	sw	a0,0(sp)
+ 4f0:	c22e                	sw	a1,4(sp)
+ 4f2:	8432                	mv	s0,a2
+ 4f4:	84b6                	mv	s1,a3
+ 4f6:	ca02                	sw	zero,20(sp)
+ 4f8:	00044783          	lbu	a5,0(s0)
+ 4fc:	00140693          	add	a3,s0,1
+ 500:	00f10fa3          	sb	a5,31(sp)
+ 504:	eb81                	bnez	a5,514 <mini_vpprintf+0x30>
+ 506:	40e6                	lw	ra,88(sp)
+ 508:	4456                	lw	s0,84(sp)
+ 50a:	4552                	lw	a0,20(sp)
+ 50c:	44c6                	lw	s1,80(sp)
+ 50e:	05c10113          	add	sp,sp,92
+ 512:	8082                	ret
+ 514:	c636                	sw	a3,12(sp)
+ 516:	02500713          	li	a4,37
+ 51a:	02e78063          	beq	a5,a4,53a <mini_vpprintf+0x56>
+ 51e:	4612                	lw	a2,4(sp)
+ 520:	4782                	lw	a5,0(sp)
+ 522:	4585                	li	a1,1
+ 524:	01f10513          	add	a0,sp,31
+ 528:	9782                	jalr	a5
+ 52a:	46b2                	lw	a3,12(sp)
+ 52c:	c426                	sw	s1,8(sp)
+ 52e:	8436                	mv	s0,a3
+ 530:	47d2                	lw	a5,20(sp)
+ 532:	44a2                	lw	s1,8(sp)
+ 534:	97aa                	add	a5,a5,a0
+ 536:	ca3e                	sw	a5,20(sp)
+ 538:	b7c1                	j	4f8 <mini_vpprintf+0x14>
+ 53a:	00144703          	lbu	a4,1(s0)
+ 53e:	03000613          	li	a2,48
+ 542:	03000693          	li	a3,48
+ 546:	00e10fa3          	sb	a4,31(sp)
+ 54a:	c632                	sw	a2,12(sp)
+ 54c:	00240793          	add	a5,s0,2
+ 550:	08d71263          	bne	a4,a3,5d4 <mini_vpprintf+0xf0>
+ 554:	843e                	mv	s0,a5
+ 556:	4681                	li	a3,0
+ 558:	4781                	li	a5,0
+ 55a:	45a5                	li	a1,9
+ 55c:	a811                	j	570 <mini_vpprintf+0x8c>
+ 55e:	00279713          	sll	a4,a5,0x2
+ 562:	0405                	add	s0,s0,1
+ 564:	97ba                	add	a5,a5,a4
+ 566:	fff44703          	lbu	a4,-1(s0)
+ 56a:	0786                	sll	a5,a5,0x1
+ 56c:	97b2                	add	a5,a5,a2
+ 56e:	4685                	li	a3,1
+ 570:	fd070613          	add	a2,a4,-48 # 40020fd0 <__global_pointer$+0x200207d0>
+ 574:	0ff67513          	zext.b	a0,a2
+ 578:	fea5f3e3          	bgeu	a1,a0,55e <mini_vpprintf+0x7a>
+ 57c:	c299                	beqz	a3,582 <mini_vpprintf+0x9e>
+ 57e:	00e10fa3          	sb	a4,31(sp)
+ 582:	c83e                	sw	a5,16(sp)
+ 584:	46e1                	li	a3,24
+ 586:	00f6d363          	bge	a3,a5,58c <mini_vpprintf+0xa8>
+ 58a:	c836                	sw	a3,16(sp)
+ 58c:	06c00613          	li	a2,108
+ 590:	4681                	li	a3,0
+ 592:	00c71863          	bne	a4,a2,5a2 <mini_vpprintf+0xbe>
+ 596:	00044703          	lbu	a4,0(s0)
+ 59a:	4685                	li	a3,1
+ 59c:	0405                	add	s0,s0,1
+ 59e:	00e10fa3          	sb	a4,31(sp)
+ 5a2:	01f14603          	lbu	a2,31(sp)
+ 5a6:	06400713          	li	a4,100
+ 5aa:	06e60563          	beq	a2,a4,614 <mini_vpprintf+0x130>
+ 5ae:	02c76763          	bltu	a4,a2,5dc <mini_vpprintf+0xf8>
+ 5b2:	05800793          	li	a5,88
+ 5b6:	0af60063          	beq	a2,a5,656 <mini_vpprintf+0x172>
+ 5ba:	06300793          	li	a5,99
+ 5be:	0af60d63          	beq	a2,a5,678 <mini_vpprintf+0x194>
+ 5c2:	d231                	beqz	a2,506 <mini_vpprintf+0x22>
+ 5c4:	4612                	lw	a2,4(sp)
+ 5c6:	4782                	lw	a5,0(sp)
+ 5c8:	4585                	li	a1,1
+ 5ca:	01f10513          	add	a0,sp,31
+ 5ce:	9782                	jalr	a5
+ 5d0:	c426                	sw	s1,8(sp)
+ 5d2:	bfb9                	j	530 <mini_vpprintf+0x4c>
+ 5d4:	02000693          	li	a3,32
+ 5d8:	c636                	sw	a3,12(sp)
+ 5da:	bfad                	j	554 <mini_vpprintf+0x70>
+ 5dc:	07500713          	li	a4,117
+ 5e0:	02e60a63          	beq	a2,a4,614 <mini_vpprintf+0x130>
+ 5e4:	07800713          	li	a4,120
+ 5e8:	06e60763          	beq	a2,a4,656 <mini_vpprintf+0x172>
+ 5ec:	07300713          	li	a4,115
+ 5f0:	fce61ae3          	bne	a2,a4,5c4 <mini_vpprintf+0xe0>
+ 5f4:	cc3e                	sw	a5,24(sp)
+ 5f6:	00448793          	add	a5,s1,4
+ 5fa:	4084                	lw	s1,0(s1)
+ 5fc:	c43e                	sw	a5,8(sp)
+ 5fe:	8526                	mv	a0,s1
+ 600:	3dc9                	jal	4d2 <strlen>
+ 602:	47e2                	lw	a5,24(sp)
+ 604:	85aa                	mv	a1,a0
+ 606:	08f05663          	blez	a5,692 <mini_vpprintf+0x1ae>
+ 60a:	46c2                	lw	a3,16(sp)
+ 60c:	4632                	lw	a2,12(sp)
+ 60e:	1838                	add	a4,sp,56
+ 610:	8526                	mv	a0,s1
+ 612:	a01d                	j	638 <mini_vpprintf+0x154>
+ 614:	00448793          	add	a5,s1,4
+ 618:	c43e                	sw	a5,8(sp)
+ 61a:	c695                	beqz	a3,646 <mini_vpprintf+0x162>
+ 61c:	f8b60613          	add	a2,a2,-117
+ 620:	1018                	add	a4,sp,32
+ 622:	00163693          	seqz	a3,a2
+ 626:	4088                	lw	a0,0(s1)
+ 628:	4601                	li	a2,0
+ 62a:	45a9                	li	a1,10
+ 62c:	3679                	jal	1ba <mini_itoa.part.0>
+ 62e:	46c2                	lw	a3,16(sp)
+ 630:	4632                	lw	a2,12(sp)
+ 632:	1838                	add	a4,sp,56
+ 634:	85aa                	mv	a1,a0
+ 636:	1008                	add	a0,sp,32
+ 638:	34dd                	jal	11e <mini_pad>
+ 63a:	4612                	lw	a2,4(sp)
+ 63c:	85aa                	mv	a1,a0
+ 63e:	1828                	add	a0,sp,56
+ 640:	4782                	lw	a5,0(sp)
+ 642:	9782                	jalr	a5
+ 644:	b5f5                	j	530 <mini_vpprintf+0x4c>
+ 646:	07500793          	li	a5,117
+ 64a:	1018                	add	a4,sp,32
+ 64c:	4685                	li	a3,1
+ 64e:	fcf60ce3          	beq	a2,a5,626 <mini_vpprintf+0x142>
+ 652:	4681                	li	a3,0
+ 654:	bfc9                	j	626 <mini_vpprintf+0x142>
+ 656:	4088                	lw	a0,0(s1)
+ 658:	fa860613          	add	a2,a2,-88
+ 65c:	00448793          	add	a5,s1,4
+ 660:	1018                	add	a4,sp,32
+ 662:	4685                	li	a3,1
+ 664:	00163613          	seqz	a2,a2
+ 668:	45c1                	li	a1,16
+ 66a:	c43e                	sw	a5,8(sp)
+ 66c:	36b9                	jal	1ba <mini_itoa.part.0>
+ 66e:	46c2                	lw	a3,16(sp)
+ 670:	4632                	lw	a2,12(sp)
+ 672:	85aa                	mv	a1,a0
+ 674:	1838                	add	a4,sp,56
+ 676:	b7c1                	j	636 <mini_vpprintf+0x152>
+ 678:	00448793          	add	a5,s1,4
+ 67c:	c43e                	sw	a5,8(sp)
+ 67e:	409c                	lw	a5,0(s1)
+ 680:	46c2                	lw	a3,16(sp)
+ 682:	4632                	lw	a2,12(sp)
+ 684:	00f10fa3          	sb	a5,31(sp)
+ 688:	1838                	add	a4,sp,56
+ 68a:	4585                	li	a1,1
+ 68c:	01f10513          	add	a0,sp,31
+ 690:	b765                	j	638 <mini_vpprintf+0x154>
+ 692:	4612                	lw	a2,4(sp)
+ 694:	8526                	mv	a0,s1
+ 696:	b76d                	j	640 <mini_vpprintf+0x15c>
+
+00000698 <printf>:
+ 698:	fdc10113          	add	sp,sp,-36
+ 69c:	ca32                	sw	a2,20(sp)
+ 69e:	862a                	mv	a2,a0
+ 6a0:	c82e                	sw	a1,16(sp)
+ 6a2:	cc36                	sw	a3,24(sp)
+ 6a4:	4581                	li	a1,0
+ 6a6:	0814                	add	a3,sp,16
+ 6a8:	43200513          	li	a0,1074
+ 6ac:	c606                	sw	ra,12(sp)
+ 6ae:	ce3a                	sw	a4,28(sp)
+ 6b0:	d03e                	sw	a5,32(sp)
+ 6b2:	c036                	sw	a3,0(sp)
+ 6b4:	3d05                	jal	4e4 <mini_vpprintf>
+ 6b6:	40b2                	lw	ra,12(sp)
+ 6b8:	02410113          	add	sp,sp,36
+ 6bc:	8082                	ret
+
+000006be <memset>:
+ 6be:	962a                	add	a2,a2,a0
+ 6c0:	87aa                	mv	a5,a0
+ 6c2:	00c79363          	bne	a5,a2,6c8 <memset+0xa>
+ 6c6:	8082                	ret
+ 6c8:	00b78023          	sb	a1,0(a5)
+ 6cc:	0785                	add	a5,a5,1
+ 6ce:	bfd5                	j	6c2 <memset+0x4>
+
+000006d0 <memcpy>:
+ 6d0:	4781                	li	a5,0
+ 6d2:	00f61363          	bne	a2,a5,6d8 <memcpy+0x8>
+ 6d6:	8082                	ret
+ 6d8:	00f58733          	add	a4,a1,a5
+ 6dc:	00074683          	lbu	a3,0(a4)
+ 6e0:	00f50733          	add	a4,a0,a5
+ 6e4:	0785                	add	a5,a5,1
+ 6e6:	00d70023          	sb	a3,0(a4)
+ 6ea:	b7e5                	j	6d2 <memcpy+0x2>
+
+000006ec <SystemInit>:
+ 6ec:	400217b7          	lui	a5,0x40021
+ 6f0:	01080737          	lui	a4,0x1080
+ 6f4:	0007a223          	sw	zero,4(a5) # 40021004 <__global_pointer$+0x20020804>
+ 6f8:	08170713          	add	a4,a4,129 # 1080081 <main.c.e947e7e5+0x107e2e5>
+ 6fc:	c398                	sw	a4,0(a5)
+ 6fe:	4685                	li	a3,1
+ 700:	40022737          	lui	a4,0x40022
+ 704:	c314                	sw	a3,0(a4)
+ 706:	009f0737          	lui	a4,0x9f0
+ 70a:	c798                	sw	a4,8(a5)
+ 70c:	40021737          	lui	a4,0x40021
+ 710:	431c                	lw	a5,0(a4)
+ 712:	00679693          	sll	a3,a5,0x6
+ 716:	fe06dde3          	bgez	a3,710 <SystemInit+0x24>
+ 71a:	435c                	lw	a5,4(a4)
+ 71c:	400216b7          	lui	a3,0x40021
+ 720:	9bf1                	and	a5,a5,-4
+ 722:	0027e793          	or	a5,a5,2
+ 726:	c35c                	sw	a5,4(a4)
+ 728:	4721                	li	a4,8
+ 72a:	42dc                	lw	a5,4(a3)
+ 72c:	8bb1                	and	a5,a5,12
+ 72e:	fee79ee3          	bne	a5,a4,72a <SystemInit+0x3e>
+ 732:	e00007b7          	lui	a5,0xe0000
+ 736:	0f878793          	add	a5,a5,248 # e00000f8 <__global_pointer$+0xbffff8f8>
+ 73a:	0007a023          	sw	zero,0(a5)
+ 73e:	e00007b7          	lui	a5,0xe0000
+ 742:	0f478793          	add	a5,a5,244 # e00000f4 <__global_pointer$+0xbffff8f4>
+ 746:	08000713          	li	a4,128
+ 74a:	c398                	sw	a4,0(a5)
+ 74c:	8082                	ret
+
+0000074e <main>:
+#include "i2c.h"
+#include <stdio.h>
+
+
+int main( void )
+{
+ 74e:	1141                	add	sp,sp,-16
+ 750:	c606                	sw	ra,12(sp)
+ 752:	c422                	sw	s0,8(sp)
+	uint8_t read_buff[2];
+
+	SystemInit();
+ 754:	3f61                	jal	6ec <SystemInit>
+	int32_t timeout;
+#ifdef I2C_MODE_IRQ
+	while ( i2c_irq_state )
+		; // wait for previous packet to finish
+	i2c_xfer_sz = sz; // init buffer for sending
+	i2c_data_ptr = data;
+ 756:	20000437          	lui	s0,0x20000
+	i2c_init();
+ 75a:	3e51                	jal	2ee <i2c_init>
+#endif
+
+void DelaySysTick( uint32_t n )
+{
+#ifdef CH32V003
+	uint32_t targend = SysTick->CNT + n;
+ 75c:	e000f7b7          	lui	a5,0xe000f
+ 760:	4798                	lw	a4,8(a5)
+ 762:	005b97b7          	lui	a5,0x5b9
+ 766:	d8078793          	add	a5,a5,-640 # 5b8d80 <main.c.e947e7e5+0x5b6fe4>
+ 76a:	973e                	add	a4,a4,a5
+	while ( ( (int32_t)( SysTick->CNT - targend ) ) < 0 )
+ 76c:	e000f6b7          	lui	a3,0xe000f
+ 770:	469c                	lw	a5,8(a3)
+ 772:	8f99                	sub	a5,a5,a4
+ 774:	fe07cee3          	bltz	a5,770 <main+0x22>
+	while ( i2c_irq_state )
+ 778:	8051c783          	lbu	a5,-2043(gp) # 20000005 <i2c_irq_state>
+ 77c:	fff5                	bnez	a5,778 <main+0x2a>
+	i2c_xfer_sz = sz; // init buffer for sending
+ 77e:	200007b7          	lui	a5,0x20000
+ 782:	4709                	li	a4,2
+ 784:	00e78223          	sb	a4,4(a5) # 20000004 <i2c_xfer_sz>
+#endif
+	// wait for not busy
+	timeout = I2C_TIMEOUT_MAX;
+	while ( ( I2C1->STAR2 & I2C_STAR2_BUSY ) && ( timeout-- ) )
+ 788:	400057b7          	lui	a5,0x40005
+	i2c_data_ptr = data;
+ 78c:	00242023          	sw	sp,0(s0) # 20000000 <i2c_data_ptr>
+	timeout = I2C_TIMEOUT_MAX;
+ 790:	7d000713          	li	a4,2000
+	while ( ( I2C1->STAR2 & I2C_STAR2_BUSY ) && ( timeout-- ) )
+ 794:	40078793          	add	a5,a5,1024 # 40005400 <__global_pointer$+0x20004c00>
+ 798:	55fd                	li	a1,-1
+ 79a:	0187d603          	lhu	a2,24(a5)
+ 79e:	8a09                	and	a2,a2,2
+ 7a0:	ca1d                	beqz	a2,7d6 <main+0x88>
+ 7a2:	177d                	add	a4,a4,-1 # 40020fff <__global_pointer$+0x200207ff>
+ 7a4:	feb71be3          	bne	a4,a1,79a <main+0x4c>
+	while ( 1 )
+	{
+		Delay_Ms( 1000 );
+
+		/* if the read fails or times out, then reset the i2c bus */
+		if ( ( i2c_read( 0x9, read_buff, 2 ) ) ) i2c_init();
+ 7a8:	3699                	jal	2ee <i2c_init>
+ 7aa:	a829                	j	7c4 <main+0x76>
+	while ( ( !i2c_chk_evt( I2C_EVENT_MASTER_RECEIVER_MODE_SELECTED ) ) && ( timeout-- ) )
+		;
+	if ( timeout == -1 ) return I2C_TIMEOUT_NO_ACK;
+#ifdef I2C_MODE_IRQ
+	// Enable interrupts
+	I2C1->CTLR2 |= I2C_INT_EN_MASK;
+ 7ac:	00475783          	lhu	a5,4(a4)
+ 7b0:	7007e793          	or	a5,a5,1792
+ 7b4:	00f71223          	sh	a5,4(a4)
+	i2c_irq_state = 1;
+ 7b8:	4785                	li	a5,1
+ 7ba:	80f182a3          	sb	a5,-2043(gp) # 20000005 <i2c_irq_state>
+	while ( i2c_irq_state ) // what's the point of using an interrupt if we're just going to busywait?
+ 7be:	8051c783          	lbu	a5,-2043(gp) # 20000005 <i2c_irq_state>
+ 7c2:	fff5                	bnez	a5,7be <main+0x70>
+
+		printf( "got: %2x %2x \n", read_buff[0], read_buff[1] );
+ 7c4:	00114603          	lbu	a2,1(sp)
+ 7c8:	00014583          	lbu	a1,0(sp)
+ 7cc:	6505                	lui	a0,0x1
+ 7ce:	9d450513          	add	a0,a0,-1580 # 9d4 <I2C1_ER_IRQHandler+0x68>
+ 7d2:	35d9                	jal	698 <printf>
+		Delay_Ms( 1000 );
+ 7d4:	b761                	j	75c <main+0xe>
+	if ( sz > 1 ) I2C1->CTLR1 |= I2C_CTLR1_ACK; // enable ACK's - for when receiving from slave
+ 7d6:	0007d703          	lhu	a4,0(a5)
+	while ( !i2c_chk_evt( I2C_EVENT_MASTER_MODE_SELECT ) )
+ 7da:	00030637          	lui	a2,0x30
+ 7de:	0605                	add	a2,a2,1 # 30001 <main.c.e947e7e5+0x2e265>
+	if ( sz > 1 ) I2C1->CTLR1 |= I2C_CTLR1_ACK; // enable ACK's - for when receiving from slave
+ 7e0:	40076713          	or	a4,a4,1024
+ 7e4:	00e79023          	sh	a4,0(a5)
+	I2C1->CTLR1 |= I2C_CTLR1_START;
+ 7e8:	0007d703          	lhu	a4,0(a5)
+ 7ec:	10076713          	or	a4,a4,256
+ 7f0:	00e79023          	sh	a4,0(a5)
+	uint32_t status = I2C1->STAR1 | ( I2C1->STAR2 << 16 );
+ 7f4:	40005737          	lui	a4,0x40005
+ 7f8:	40070713          	add	a4,a4,1024 # 40005400 <__global_pointer$+0x20004c00>
+ 7fc:	01475583          	lhu	a1,20(a4)
+ 800:	01875783          	lhu	a5,24(a4)
+ 804:	07c2                	sll	a5,a5,0x10
+ 806:	8fcd                	or	a5,a5,a1
+	while ( !i2c_chk_evt( I2C_EVENT_MASTER_MODE_SELECT ) )
+ 808:	8ff1                	and	a5,a5,a2
+ 80a:	fec799e3          	bne	a5,a2,7fc <main+0xae>
+	I2C1->DATAR = ( devAddr << 1 ) | 0x01; // send 7-bit address + read flag
+ 80e:	47cd                	li	a5,19
+ 810:	00f71823          	sh	a5,16(a4)
+	while ( ( !i2c_chk_evt( I2C_EVENT_MASTER_RECEIVER_MODE_SELECTED ) ) && ( timeout-- ) )
+ 814:	00030637          	lui	a2,0x30
+	uint32_t status = I2C1->STAR1 | ( I2C1->STAR2 << 16 );
+ 818:	40005737          	lui	a4,0x40005
+	timeout = I2C_TIMEOUT_MAX; // wait for transmit condition
+ 81c:	7d000593          	li	a1,2000
+	uint32_t status = I2C1->STAR1 | ( I2C1->STAR2 << 16 );
+ 820:	40070713          	add	a4,a4,1024 # 40005400 <__global_pointer$+0x20004c00>
+	while ( ( !i2c_chk_evt( I2C_EVENT_MASTER_RECEIVER_MODE_SELECTED ) ) && ( timeout-- ) )
+ 824:	0609                	add	a2,a2,2 # 30002 <main.c.e947e7e5+0x2e266>
+ 826:	557d                	li	a0,-1
+	uint32_t status = I2C1->STAR1 | ( I2C1->STAR2 << 16 );
+ 828:	01475303          	lhu	t1,20(a4)
+ 82c:	01875783          	lhu	a5,24(a4)
+ 830:	07c2                	sll	a5,a5,0x10
+ 832:	0067e7b3          	or	a5,a5,t1
+	while ( ( !i2c_chk_evt( I2C_EVENT_MASTER_RECEIVER_MODE_SELECTED ) ) && ( timeout-- ) )
+ 836:	8ff1                	and	a5,a5,a2
+ 838:	f6c78ae3          	beq	a5,a2,7ac <main+0x5e>
+ 83c:	15fd                	add	a1,a1,-1
+ 83e:	fea595e3          	bne	a1,a0,828 <main+0xda>
+ 842:	b79d                	j	7a8 <main+0x5a>
+
+00000844 <I2C1_EV_IRQHandler>:
+ * bus.
+ */
+#ifdef I2C_MODE_IRQ
+void I2C1_EV_IRQHandler( void ) __attribute__( ( interrupt ) );
+void I2C1_EV_IRQHandler( void )
+{
+ 844:	1111                	add	sp,sp,-28
+ 846:	c23a                	sw	a4,4(sp)
+	uint16_t star1, err __attribute__( ( unused ) );
+	uint8_t sz = i2c_xfer_sz;
+	// read status, clear any events
+	star1 = I2C1->STAR1;
+ 848:	40005737          	lui	a4,0x40005
+{
+ 84c:	c436                	sw	a3,8(sp)
+	star1 = I2C1->STAR1;
+ 84e:	40070713          	add	a4,a4,1024 # 40005400 <__global_pointer$+0x20004c00>
+	uint8_t sz = i2c_xfer_sz;
+ 852:	200006b7          	lui	a3,0x20000
+{
+ 856:	c632                	sw	a2,12(sp)
+ 858:	c03e                	sw	a5,0(sp)
+	uint8_t sz = i2c_xfer_sz;
+ 85a:	0046c783          	lbu	a5,4(a3) # 20000004 <i2c_xfer_sz>
+	star1 = I2C1->STAR1;
+ 85e:	01475603          	lhu	a2,20(a4)
+{
+ 862:	c82e                	sw	a1,16(sp)
+ 864:	cc1a                	sw	t1,24(sp)
+	star1 = I2C1->STAR1;
+ 866:	01061593          	sll	a1,a2,0x10
+{
+ 86a:	ca2a                	sw	a0,20(sp)
+	// reset error flags;
+	if ( star1 & I2C_STAR1_TXE ) // byte teansmitted
+ 86c:	08067613          	and	a2,a2,128
+	uint8_t sz = i2c_xfer_sz;
+ 870:	0ff7f793          	zext.b	a5,a5
+	star1 = I2C1->STAR1;
+ 874:	81c1                	srl	a1,a1,0x10
+	if ( star1 & I2C_STAR1_TXE ) // byte teansmitted
+ 876:	c615                	beqz	a2,8a2 <I2C1_EV_IRQHandler+0x5e>
+	{
+		if ( sz-- ) I2C1->DATAR = *i2c_data_ptr++;
+ 878:	fff78613          	add	a2,a5,-1
+ 87c:	0ff67613          	zext.b	a2,a2
+ 880:	c385                	beqz	a5,8a0 <I2C1_EV_IRQHandler+0x5c>
+ 882:	20000537          	lui	a0,0x20000
+ 886:	00052783          	lw	a5,0(a0) # 20000000 <i2c_data_ptr>
+ 88a:	00178313          	add	t1,a5,1
+ 88e:	0007c783          	lbu	a5,0(a5)
+ 892:	00652023          	sw	t1,0(a0)
+ 896:	0ff7f793          	zext.b	a5,a5
+ 89a:	00f71823          	sh	a5,16(a4)
+		if ( !sz )
+ 89e:	c63d                	beqz	a2,90c <I2C1_EV_IRQHandler+0xc8>
+		if ( sz-- ) I2C1->DATAR = *i2c_data_ptr++;
+ 8a0:	87b2                	mv	a5,a2
+			while ( !i2c_chk_evt( I2C_EVENT_MASTER_BYTE_TRANSMITTED ) )
+				;
+			I2C1->CTLR1 |= I2C_CTLR1_STOP;
+		}
+	}
+	if ( star1 & I2C_STAR1_RXNE ) // data received
+ 8a2:	0405f593          	and	a1,a1,64
+ 8a6:	c5b9                	beqz	a1,8f4 <I2C1_EV_IRQHandler+0xb0>
+	{
+		if ( sz-- )
+ 8a8:	fff78713          	add	a4,a5,-1
+ 8ac:	0ff77713          	zext.b	a4,a4
+ 8b0:	c3a9                	beqz	a5,8f2 <I2C1_EV_IRQHandler+0xae>
+		{
+			if ( sz == 1 ) I2C1->CTLR1 &= ~I2C_CTLR1_ACK; // signal it's the last byte
+ 8b2:	4785                	li	a5,1
+ 8b4:	00f71c63          	bne	a4,a5,8cc <I2C1_EV_IRQHandler+0x88>
+ 8b8:	400057b7          	lui	a5,0x40005
+ 8bc:	4007d603          	lhu	a2,1024(a5) # 40005400 <__global_pointer$+0x20004c00>
+ 8c0:	65c1                	lui	a1,0x10
+ 8c2:	bff58593          	add	a1,a1,-1025 # fbff <main.c.e947e7e5+0xde63>
+ 8c6:	8e6d                	and	a2,a2,a1
+ 8c8:	40c79023          	sh	a2,1024(a5)
+			*i2c_data_ptr++ = I2C1->DATAR;
+ 8cc:	400057b7          	lui	a5,0x40005
+ 8d0:	20000537          	lui	a0,0x20000
+ 8d4:	00052583          	lw	a1,0(a0) # 20000000 <i2c_data_ptr>
+ 8d8:	4107d603          	lhu	a2,1040(a5) # 40005410 <__global_pointer$+0x20004c10>
+ 8dc:	40078793          	add	a5,a5,1024
+ 8e0:	00158313          	add	t1,a1,1
+ 8e4:	0ff67613          	zext.b	a2,a2
+ 8e8:	00652023          	sw	t1,0(a0)
+ 8ec:	00c58023          	sb	a2,0(a1)
+		}
+		if ( !sz )
+ 8f0:	cf29                	beqz	a4,94a <I2C1_EV_IRQHandler+0x106>
+		if ( sz-- )
+ 8f2:	87ba                	mv	a5,a4
+			I2C1->CTLR2 &= ~I2C_INT_EN_MASK;
+			i2c_irq_state = 0;
+			I2C1->CTLR1 |= I2C_CTLR1_STOP; // set STOP condition
+		}
+	}
+	i2c_xfer_sz = sz;
+ 8f4:	00f68223          	sb	a5,4(a3)
+}
+ 8f8:	4362                	lw	t1,24(sp)
+ 8fa:	4552                	lw	a0,20(sp)
+ 8fc:	45c2                	lw	a1,16(sp)
+ 8fe:	4632                	lw	a2,12(sp)
+ 900:	46a2                	lw	a3,8(sp)
+ 902:	4712                	lw	a4,4(sp)
+ 904:	4782                	lw	a5,0(sp)
+ 906:	0171                	add	sp,sp,28
+ 908:	30200073          	mret
+			I2C1->CTLR2 &= ~I2C_INT_EN_MASK;
+ 90c:	00475783          	lhu	a5,4(a4)
+ 910:	6641                	lui	a2,0x10
+ 912:	8ff60613          	add	a2,a2,-1793 # f8ff <main.c.e947e7e5+0xdb63>
+ 916:	8ff1                	and	a5,a5,a2
+ 918:	00f71223          	sh	a5,4(a4)
+			while ( !i2c_chk_evt( I2C_EVENT_MASTER_BYTE_TRANSMITTED ) )
+ 91c:	00070637          	lui	a2,0x70
+			i2c_irq_state = 0;
+ 920:	800182a3          	sb	zero,-2043(gp) # 20000005 <i2c_irq_state>
+			while ( !i2c_chk_evt( I2C_EVENT_MASTER_BYTE_TRANSMITTED ) )
+ 924:	08460613          	add	a2,a2,132 # 70084 <main.c.e947e7e5+0x6e2e8>
+	uint32_t status = I2C1->STAR1 | ( I2C1->STAR2 << 16 );
+ 928:	01475503          	lhu	a0,20(a4)
+ 92c:	01875783          	lhu	a5,24(a4)
+ 930:	07c2                	sll	a5,a5,0x10
+ 932:	8fc9                	or	a5,a5,a0
+			while ( !i2c_chk_evt( I2C_EVENT_MASTER_BYTE_TRANSMITTED ) )
+ 934:	8ff1                	and	a5,a5,a2
+ 936:	fec799e3          	bne	a5,a2,928 <I2C1_EV_IRQHandler+0xe4>
+			I2C1->CTLR1 |= I2C_CTLR1_STOP;
+ 93a:	00075783          	lhu	a5,0(a4)
+ 93e:	2007e793          	or	a5,a5,512
+ 942:	00f71023          	sh	a5,0(a4)
+		if ( sz-- ) I2C1->DATAR = *i2c_data_ptr++;
+ 946:	4781                	li	a5,0
+ 948:	bfa9                	j	8a2 <I2C1_EV_IRQHandler+0x5e>
+			I2C1->CTLR2 &= ~I2C_INT_EN_MASK;
+ 94a:	0047d603          	lhu	a2,4(a5)
+ 94e:	65c1                	lui	a1,0x10
+ 950:	8ff58593          	add	a1,a1,-1793 # f8ff <main.c.e947e7e5+0xdb63>
+ 954:	8e6d                	and	a2,a2,a1
+ 956:	00c79223          	sh	a2,4(a5)
+			i2c_irq_state = 0;
+ 95a:	800182a3          	sb	zero,-2043(gp) # 20000005 <i2c_irq_state>
+			I2C1->CTLR1 |= I2C_CTLR1_STOP; // set STOP condition
+ 95e:	0007d603          	lhu	a2,0(a5)
+ 962:	20066613          	or	a2,a2,512
+ 966:	00c79023          	sh	a2,0(a5)
+ 96a:	b761                	j	8f2 <I2C1_EV_IRQHandler+0xae>
+
+0000096c <I2C1_ER_IRQHandler>:
+
+void I2C1_ER_IRQHandler( void ) __attribute__( ( interrupt ) );
+void I2C1_ER_IRQHandler( void )
+{
+ 96c:	fd810113          	add	sp,sp,-40
+ 970:	c03e                	sw	a5,0(sp)
+	uint16_t star1, err __attribute__( ( unused ) );
+	star1 = I2C1->STAR1;
+ 972:	400057b7          	lui	a5,0x40005
+{
+ 976:	c23a                	sw	a4,4(sp)
+	star1 = I2C1->STAR1;
+ 978:	4147d703          	lhu	a4,1044(a5) # 40005414 <__global_pointer$+0x20004c14>
+{
+ 97c:	c436                	sw	a3,8(sp)
+	err = star1 & I2C_STAR1_ERR_MASK;
+ 97e:	6689                	lui	a3,0x2
+ 980:	f0068693          	add	a3,a3,-256 # 1f00 <main.c.e947e7e5+0x164>
+ 984:	8f75                	and	a4,a4,a3
+{
+ 986:	d206                	sw	ra,36(sp)
+ 988:	d016                	sw	t0,32(sp)
+ 98a:	ce1a                	sw	t1,28(sp)
+ 98c:	cc1e                	sw	t2,24(sp)
+ 98e:	ca2a                	sw	a0,20(sp)
+ 990:	c82e                	sw	a1,16(sp)
+ 992:	c632                	sw	a2,12(sp)
+	if ( err )
+ 994:	cf05                	beqz	a4,9cc <I2C1_ER_IRQHandler+0x60>
+	{
+		i2c_err_flags = err; // store the error flags
+ 996:	80e19323          	sh	a4,-2042(gp) # 20000006 <i2c_err_flags>
+		I2C1->STAR1 &= ~( I2C_STAR1_ERR_MASK ); // clear errors
+ 99a:	4147d703          	lhu	a4,1044(a5)
+ 99e:	76f9                	lui	a3,0xffffe
+ 9a0:	0ff68693          	add	a3,a3,255 # ffffe0ff <__global_pointer$+0xdfffd8ff>
+ 9a4:	8f75                	and	a4,a4,a3
+ 9a6:	40078793          	add	a5,a5,1024
+ 9aa:	00e79a23          	sh	a4,20(a5)
+		i2c_setup(); // reset the i2c bus
+ 9ae:	30f1                	jal	27a <i2c_setup>
+		return;
+	}
+	else
+		i2c_err_flags = 0;
+}
+ 9b0:	5092                	lw	ra,36(sp)
+ 9b2:	5282                	lw	t0,32(sp)
+ 9b4:	4372                	lw	t1,28(sp)
+ 9b6:	43e2                	lw	t2,24(sp)
+ 9b8:	4552                	lw	a0,20(sp)
+ 9ba:	45c2                	lw	a1,16(sp)
+ 9bc:	4632                	lw	a2,12(sp)
+ 9be:	46a2                	lw	a3,8(sp)
+ 9c0:	4712                	lw	a4,4(sp)
+ 9c2:	4782                	lw	a5,0(sp)
+ 9c4:	02810113          	add	sp,sp,40
+ 9c8:	30200073          	mret
+		i2c_err_flags = 0;
+ 9cc:	80019323          	sh	zero,-2042(gp) # 20000006 <i2c_err_flags>
+ 9d0:	b7c5                	j	9b0 <I2C1_ER_IRQHandler+0x44>
+ 9d2:	0000                	unimp
+ 9d4:	3a746f67          	.insn	4, 0x3a746f67
+ 9d8:	2520                	.insn	2, 0x2520
+ 9da:	7832                	.insn	2, 0x7832
+ 9dc:	2520                	.insn	2, 0x2520
+ 9de:	7832                	.insn	2, 0x7832
+ 9e0:	0a20                	add	s0,sp,280
+	...
