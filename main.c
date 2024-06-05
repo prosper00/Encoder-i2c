@@ -6,8 +6,6 @@
 #include "i2c_slave.h"
 #include <stdio.h>
 
-#define I2CADDR 0x09
-
 // read and write buffers for i2c
 // we are an i2c slave device, so a 'write' is INBOUND data (MOSI)
 // and a 'read' is outbound data (MISO)
@@ -25,8 +23,6 @@ void onWrite( uint8_t reg, uint8_t length )
 void onRead( uint8_t reg )
 {
 	i2c_read_registers[reg] = 0; // clear the buffers once it's been transmitted
-	encoder_direction = 0; // clear the encoder data
-	encoder_button_event = 0;
 }
 
 void i2c_Init( void )
@@ -58,20 +54,112 @@ void Exti_Init( void )
 	NVIC_EnableIRQ( EXTI7_0_IRQn );
 }
 
+const uint8_t LEDS[12] = { PC0, PC3, PC5, PC6, PC7, PD7, PD6, PD5, PD4, PD3, PD2, PD0 };
+
+void LEDS_Init( void )
+{
+	for ( uint8_t i = 0; i < sizeof( LEDS ); i++ )
+	{
+		funPinMode( LEDS[i], GPIO_CFGLR_OUT_2Mhz_PP );
+	}
+}
+
+void LEDsoff( void )
+{
+	for ( uint8_t i = 0; i < sizeof( LEDS ); i++ )
+	{
+		funDigitalWrite( LEDS[i], FUN_LOW );
+	}
+}
+
+void LEDson( void )
+{
+	for ( uint8_t i = 0; i < sizeof( LEDS ); i++ )
+	{
+		funDigitalWrite( LEDS[i], FUN_HIGH );
+	}
+}
+
+// updateLEDs(uint16_t) - activates the LED indicated by each bit position in the argument
+//  i.e. bit 0 == LED 0 'on'
+void updateLEDs( uint16_t num )
+{
+	LEDsoff();
+
+	for ( int i = 0; i < 12; i++ )
+	{
+		if ( num & 1 )
+		{
+			funDigitalWrite( LEDS[i], FUN_HIGH );
+		}
+		num >>= 1;
+	}
+}
+
+void blip( void )
+{
+
+	for ( int i = 0; i <= 12; i++ )
+	{
+		updateLEDs( 1 << i );
+		Delay_Ms( 8 );
+	}
+	LEDsoff();
+
+	for ( int i = 10; i >= 0; i-- )
+	{
+		updateLEDs( 1 << i );
+		Delay_Ms( 8 );
+	}
+	LEDsoff();
+}
+
 int main( void )
 {
 	SystemInit();
 	funGpioInitAll();
+
 	Exti_Init();
 	i2c_Init();
+	LEDS_Init();
+
+	int8_t count = 0;
+	bool off = false;
+
+	blip();
+	updateLEDs( 1 );
 
 	while ( 1 )
 	{
-		//__WFI(); // halt until an event comes in
+		__WFI(); // halt until an event comes in
+		// printf( "got: %2x %2x \n", i2c_read_registers[0], i2c_read_registers[1] );
+
+		if ( encoder_button_event )
+		{
+			if ( off )
+			{
+				blip();
+				updateLEDs( 1 << count );
+			}
+			else
+				blip();
+			off = !off;
+		}
+
+		count += encoder_direction;
+		if ( count >= 11 ) count = 11;
+		if ( count <= 0 ) count = 0;
+		if ( encoder_direction )
+		{
+			updateLEDs( 1 << count );
+			off = false;
+		}
+
+		encoder_direction = 0;
+		encoder_button_event = 0;
+
 		// put the encoder data into the i2c queue to send
-		Delay_Ms( 100 );
-		i2c_read_registers[0] = encoder_direction; // signed / unsigned?
-		i2c_read_registers[1] = encoder_button_event;
-		printf( "got: %2x %2x \n", i2c_read_registers[0], i2c_read_registers[1] );
+		i2c_read_registers[0] = count;
+		i2c_read_registers[1] = !off;
 	}
 }

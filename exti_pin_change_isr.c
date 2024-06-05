@@ -12,9 +12,9 @@ void EXTI7_0_IRQHandler( void )
 	{
 		// read the OTHER (non EXTI) encoder pin
 		if ( !( funDigitalRead( PA2 ) ) )
-			encoder_direction++;
-		else
 			encoder_direction--;
+		else
+			encoder_direction++;
 
 		// Acknowledge the interrupt
 		EXTI->INTFR |= EXTI_Line1;

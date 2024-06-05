@@ -36,6 +36,13 @@ $(TARGET).bin : $(TARGET).elf
 	$(PREFIX)-objdump -t $^ > $(TARGET).map
 	$(PREFIX)-objcopy -O binary $< $(TARGET).bin
 	$(PREFIX)-objcopy -O ihex $< $(TARGET).hex
+	$(PREFIX)-objcopy -O binary $(TARGET)-0x50.elf $(TARGET)-0x50.bin
+	$(PREFIX)-objcopy -O binary $(TARGET)-0x51.elf $(TARGET)-0x51.bin
+	$(PREFIX)-objcopy -O binary $(TARGET)-0x52.elf $(TARGET)-0x52.bin
+	$(PREFIX)-objcopy -O binary $(TARGET)-0x53.elf $(TARGET)-0x53.bin
+	$(PREFIX)-objcopy -O binary $(TARGET)-0x54.elf $(TARGET)-0x54.bin
+	$(PREFIX)-objcopy -O binary $(TARGET)-0x55.elf $(TARGET)-0x55.bin
+	$(PREFIX)-objcopy -O binary $(TARGET)-0x56.elf $(TARGET)-0x56.bin
 
 ifeq ($(OS),Windows_NT)
 closechlink :
@@ -66,20 +73,26 @@ clangd_clean :
 	rm -f compile_commands.json .clangd
 	rm -rf .cache
 
-FLASH_COMMAND?=$(MINICHLINK)/minichlink -w $< $(WRITE_SECTION) -b
+FLASH_COMMAND?=$(MINICHLINK)/minichlink -D -w $< $(WRITE_SECTION) -b
 
 $(GENERATED_LD_FILE) :
 	$(PREFIX)-gcc -E -P -x c -DTARGET_MCU=$(TARGET_MCU) -DMCU_PACKAGE=$(MCU_PACKAGE) -DTARGET_MCU_LD=$(TARGET_MCU_LD) $(CH32V003FUN)/ch32v003fun.ld > $(GENERATED_LD_FILE)
 
 
 $(TARGET).elf : $(FILES_TO_COMPILE) $(LINKER_SCRIPT) $(EXTRA_ELF_DEPENDENCIES)
-	$(PREFIX)-gcc -o $@ $(FILES_TO_COMPILE) $(CFLAGS) $(LDFLAGS)
+	$(PREFIX)-gcc -o $(TARGET)-0x50.elf $(FILES_TO_COMPILE) $(CFLAGS) $(LDFLAGS) -DI2CADDR=0x50
+	$(PREFIX)-gcc -o $(TARGET)-0x51.elf $(FILES_TO_COMPILE) $(CFLAGS) $(LDFLAGS) -DI2CADDR=0x51
+	$(PREFIX)-gcc -o $(TARGET)-0x52.elf $(FILES_TO_COMPILE) $(CFLAGS) $(LDFLAGS) -DI2CADDR=0x52
+	$(PREFIX)-gcc -o $(TARGET)-0x53.elf $(FILES_TO_COMPILE) $(CFLAGS) $(LDFLAGS) -DI2CADDR=0x53
+	$(PREFIX)-gcc -o $(TARGET)-0x54.elf $(FILES_TO_COMPILE) $(CFLAGS) $(LDFLAGS) -DI2CADDR=0x54
+	$(PREFIX)-gcc -o $(TARGET)-0x55.elf $(FILES_TO_COMPILE) $(CFLAGS) $(LDFLAGS) -DI2CADDR=0x55
+	$(PREFIX)-gcc -o $(TARGET)-0x56.elf $(FILES_TO_COMPILE) $(CFLAGS) $(LDFLAGS) -DI2CADDR=0x56
+	$(PREFIX)-gcc -o $@ $(FILES_TO_COMPILE) $(CFLAGS) $(LDFLAGS) -DI2CADDR=0x56
 
 cv_flash : $(TARGET).bin
-	make -C $(MINICHLINK) all
 	$(FLASH_COMMAND)
 
 cv_clean :
-	rm -rf $(TARGET).elf $(TARGET).bin $(TARGET).hex $(TARGET).lst $(TARGET).map $(TARGET).hex || true
+	rm -rf $(TARGET)*.elf $(TARGET)*.bin $(TARGET).hex $(TARGET).lst $(TARGET).map $(TARGET).hex || true
 
 build : $(TARGET).bin

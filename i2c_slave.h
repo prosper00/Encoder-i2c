@@ -222,6 +222,7 @@ void I2C1_EV_IRQHandler( void )
 		{
 			if ( i2c_slave_state.position < i2c_slave_state.read_size1 )
 			{
+				// should I move this to *after* the callback?
 				I2C1->DATAR = i2c_slave_state.read_registers1[i2c_slave_state.position];
 				if ( i2c_slave_state.read_callback1 != NULL )
 				{
